@@ -1,3 +1,12 @@
+Version: 1.6.0
+Date: Nov 30 2020
+Author: Toksisitee
+
+* When copying land as a preset, you may now also copy objects. To enable/disable this, go to Options -> Brush -> Copy Objects. Objects will NOT rotate with the landmass when pressing R. 
+* Show land height in the bottom left corner when in Landscape edit mode.
+* Fixed a crash that would happen when trying to duplicate objects (via Object -> More -> Duplicate) without entering the amount.
+
+
 Version: 1.5.0
 Date: Oct 25 2020
 Author: Toksisitee
