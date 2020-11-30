@@ -242,6 +242,7 @@ struct LandPreset
 	int LandSize;
 	DWORD Flags;
 	std::vector<LandBuffer> Land;
+	std::vector<std::pair<int, THING>> Things; // Not the best
 };
 
 
@@ -323,6 +324,7 @@ extern bool						bEngineSleep,
 								fSmooth,
 								fRaise,
 								fLower,
+								fCopyObjects,
 								fNewMarkerAdded,
 								fPaintDecorations,
 								fBrushMaxSize,

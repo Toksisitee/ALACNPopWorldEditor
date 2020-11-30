@@ -78,6 +78,7 @@ bool					bEngineSleep			= false,
 						fSmooth					= false,
 						fRaise					= false,
 						fLower					= false,
+						fCopyObjects		    = false,
 						fNewMarkerAdded			= false,
 						fPaintDecorations		= true,
 						fBrushMaxSize			= false,
@@ -4272,7 +4273,7 @@ up_skip:
 			EngineGetPick(&r0, &r1);
 
 			WORD h;
-			int sx, sz;
+			int sx, sz, i = 0;
 			float ex, ez;
 			EngineGetIntersectMapSquare(r0, r1, &sx, &sz, &ex, &ez);
 
@@ -4285,6 +4286,7 @@ up_skip:
 			while (x >= GROUND_X_SIZE) x -= GROUND_X_SIZE;
 			while (z >= GROUND_Z_SIZE) z -= GROUND_Z_SIZE;
 
+			Preset.Things.clear();
 			Preset.Land.clear();
 			Preset.LandSize = GroundEditBrushSize;
 
@@ -4297,7 +4299,24 @@ up_skip:
 					h = EngineGetGroundHeight(x + ax, z + az);
 					//if (h)
 					Preset.Land.push_back({ x+ax, z+az, h });
+
+					if (fCopyObjects)
+					{
+						THING *thing = Things;
+						if (thing) do
+						{
+							if ((int)thing->x == (int)(ax + x) && (int)thing->z == (int)(az + z)) {
+								//sprintf(str, "Copied Thing: %d,%d\n", thing->ex, thing->ez);
+								//OutputDebugString(str);
+								Preset.Things.push_back({ i, *thing });
+							}
+
+							thing = thing->Next;
+						} while (thing != Things);
+					}
+
 					ax++;
+					i++;
 				}
 				az++;
 			}
@@ -4324,14 +4343,32 @@ up_skip:
 	{
 		printf("Copy entire land as preset\n");
 		Preset.Land.clear();
+		Preset.Things.clear();
 
 		WORD h;
+		int i = 0;
 		for (int z = 0; z < 128; z++)
 		{
 			for (int x= 0; x < 128; x++)
 			{
 				h = EngineGetGroundHeight(x, z);
 				Preset.Land.push_back({ x, z, h });
+
+				if (fCopyObjects)
+				{
+					// well.. I guess I have to..
+					THING *thing = Things;
+					if (thing) do
+					{
+						if ((int)thing->x == x && (int)thing->z == z) {
+							Preset.Things.push_back({ i, *thing });
+						}
+
+						thing = thing->Next;
+					} while (thing != Things);
+				}
+
+				i++;
 			}
 		}
 		Preset.LandSize = 127;
@@ -6372,7 +6409,7 @@ _continue:
 
 		if (Preset.Land.size() && bLandPresetMode)
 		{
-			int x, z, az, ax, sx, sz, i = 0;
+			int x, z, az, ax, sx, sz, i = 0, j = 0;
 			float ex, ez;
 			WORD h, h2;
 			D3DVECTOR r0, r1;
@@ -6386,6 +6423,7 @@ _continue:
 				ax = 0;
 				while (ax <= Preset.LandSize)
 				{
+
 					if (Preset.LandSize == 127)
 					{
 						x = (int)ex;
@@ -6433,6 +6471,29 @@ _continue:
 								wEngineGround[z * GROUND_Z_SIZE + x] = h2 + h;
 							}
 						}	
+					}
+
+					for (int k = 0; k < Preset.Things.size(); k++)
+					{
+						if (i == Preset.Things[k].first)
+						{
+							if (ObjectsCount < MAX_THINGS)
+							{
+								THING *t;
+								t = new THING;
+
+								memcpy(t, &Preset.Things[k].second, sizeof(THING));
+								t->x = (float)(int)x + 0.5f;
+								t->z = (float)(int)z + 0.5f;
+								t->Thing.PosX = ((int)(x) * 2) << 8;
+								t->Thing.PosZ = ((int)(z) * 2) << 8;
+								t->Idx = 0;
+
+								LINK(Things, t);
+								ObjectsCount++;
+								DlgSetThingIndex(t);
+							}
+						}
 					}
 
 					ax++;

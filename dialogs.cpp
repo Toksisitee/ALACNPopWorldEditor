@@ -585,6 +585,7 @@ long EngineLoadMapOnly(char *filename)
 	memcpy(temp_land, level2dat->GroundHeight, sizeof(wEngineGround));
 
 	Preset.Land.clear();
+	Preset.Things.clear();
 	for (int z = 0; z < 128; z++)
 	{
 		for (int x = 0; x < 128; x++)
@@ -2932,6 +2933,11 @@ void DlgBrushUpdate(HWND hWnd)
 		CheckDlgButton(hWnd, IDC_BRUSH_MAX_SIZE, BST_CHECKED);
 	else
 		CheckDlgButton(hWnd, IDC_BRUSH_MAX_SIZE, BST_UNCHECKED);
+
+	if (fCopyObjects)
+		CheckDlgButton(hWnd, IDC_BRUSH_COPY_OBJECTS, BST_CHECKED);
+	else
+		CheckDlgButton(hWnd, IDC_BRUSH_COPY_OBJECTS, BST_UNCHECKED);
 }
 
 
@@ -3036,6 +3042,17 @@ int __stdcall DlgBrushProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			sprintf(str, SZ_BRUSH_SIZE_TXT, GroundEditBrushSize);
 			SendDlgItemMessage(hWnd, IDC_BRUSH_SIZE_TXT, WM_SETTEXT, 0, (LPARAM)str);
+		}
+		else if (wParam == IDC_BRUSH_COPY_OBJECTS)
+		{
+			if (IsDlgButtonChecked(hWnd, IDC_BRUSH_COPY_OBJECTS) == BST_CHECKED)
+			{
+				fCopyObjects = true;
+			}
+			else
+			{
+				fCopyObjects = false;
+			}
 		}
 		return 0;
 

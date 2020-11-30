@@ -336,6 +336,7 @@
 #define IDC_FLAG_PAINT					1246
 #define IDC_FLAG_BRUSH_VALUE			1247
 #define IDC_FLAG_BRUSH_VALUE_TXT        1248
+#define IDC_BRUSH_COPY_OBJECTS			1249
 #define ID_ACCEL_DLGDEVICE              40001
 #define ID_ACCEL_MENUBAR                40002
 #define ID_ACCEL_DLGBRUSH               40003
