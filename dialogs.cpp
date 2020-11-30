@@ -10390,11 +10390,15 @@ int __stdcall DlgObjectMoreProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		{
 			if (ThingSelected)
 			{
+				memset(str, 0, sizeof(str));
 				GetWindowText(GetDlgItem(hWnd, IDC_OBJMORE_CREATE_TXT_BOX), str, sizeof(str));
-				for (int i = 0; i < std::stoi(str); i++)
+				if (str[0] != 0)
 				{
-					fQuickDuplicate = true;
-					DlgObjectNewObj();
+					for (int i = 0; i < std::stoi(str); i++)
+					{
+						fQuickDuplicate = true;
+						DlgObjectNewObj();
+					}
 				}
 			}
 		}
