@@ -12,7 +12,7 @@
 
 // Determine the version number constants.
 #define ENGINE_MAJOR_VERSION		1
-#define ENGINE_MINOR_VERSION		5
+#define ENGINE_MINOR_VERSION		6
 #define ENGINE_REVISION_NUMBER		0
 #define ENGINE_BUILD_NUMBER		BUILD_INCREMENT
 
