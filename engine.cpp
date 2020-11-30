@@ -1464,10 +1464,10 @@ long EngineDrawFlag(int x, int z)
 	switch (nFlagPaintSelected)
 	{
 	case FPI_TEXTURE_ALT:
-		sprintf(str, "X=%d Z=%d TexAlt=%d", x, z, MapSave.Elements[z * GROUND_Z_SIZE + x].TextureAlt);
+		sprintf(str, "X=%d Z=%d Y=%d TexAlt=%d", x, z, EngineGetGroundHeight(x, z), MapSave.Elements[z * GROUND_Z_SIZE + x].TextureAlt);
 		break;
 	default:
-		sprintf(str, "X=%d Z=%d", x, z);
+		sprintf(str, "X=%d Z=%d Y=%d", x, z, EngineGetGroundHeight(x, z));
 		break;
 	}
 
