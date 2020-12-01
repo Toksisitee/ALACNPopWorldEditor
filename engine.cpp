@@ -477,13 +477,10 @@ void MatrixToLand(WORD(&matrix)[128][128], WORD(&land)[128 * 128])
 
 void Matrix_Rotate90(WORD a[128][128])
 {
-	// Traverse each cycle 
 	for (int i = 0; i < 128 / 2; i++) 
 	{
 		for (int j = i; j < 128 - i - 1; j++) 
 		{
-			// Swap elements of each cycle 
-			// in clockwise direction 
 			WORD temp = a[i][j];
 			a[i][j] = a[128 - 1 - j][i];
 			a[128 - 1 - j][i] = a[128 - 1 - i][128 - 1 - j];
@@ -4277,18 +4274,20 @@ up_skip:
 			float ex, ez;
 			EngineGetIntersectMapSquare(r0, r1, &sx, &sz, &ex, &ez);
 
-			int ax, az;
+			int ax, az, tx, tz;
 			auto x = (int)ex - (GroundEditBrushSize / 2);
 			auto z = (int)ez - (GroundEditBrushSize / 2);
+			tx = x;
+			tz = z;
 
 			while (x < 0) x += GROUND_X_SIZE;
 			while (z < 0) z += GROUND_Z_SIZE;
 			while (x >= GROUND_X_SIZE) x -= GROUND_X_SIZE;
 			while (z >= GROUND_Z_SIZE) z -= GROUND_Z_SIZE;
 
-			Preset.Things.clear();
 			Preset.Land.clear();
 			Preset.LandSize = GroundEditBrushSize;
+			Preset.Rotation = 0;
 
 			az = 0;
 			while (az <= GroundEditBrushSize)
@@ -4298,17 +4297,15 @@ up_skip:
 				{
 					h = EngineGetGroundHeight(x + ax, z + az);
 					//if (h)
-					Preset.Land.push_back({ x+ax, z+az, h });
+					Preset.Land.push_back({ x + ax, z + az, h, {0} });
 
 					if (fCopyObjects)
 					{
 						THING *thing = Things;
 						if (thing) do
 						{
-							if ((int)thing->x == (int)(ax + x) && (int)thing->z == (int)(az + z)) {
-								//sprintf(str, "Copied Thing: %d,%d\n", thing->ex, thing->ez);
-								//OutputDebugString(str);
-								Preset.Things.push_back({ i, *thing });
+							if ((int)thing->ex == (int)(ax + tx) && (int)thing->ez == (int)(az + tz)) {
+								Preset.Land[i].t = *thing;
 							}
 
 							thing = thing->Next;
@@ -4342,8 +4339,8 @@ up_skip:
 	if (bKeys[VK_CONTROL] && bKeys[0x41])
 	{
 		printf("Copy entire land as preset\n");
+		Preset.Rotation = 0;
 		Preset.Land.clear();
-		Preset.Things.clear();
 
 		WORD h;
 		int i = 0;
@@ -4352,16 +4349,15 @@ up_skip:
 			for (int x= 0; x < 128; x++)
 			{
 				h = EngineGetGroundHeight(x, z);
-				Preset.Land.push_back({ x, z, h });
+				Preset.Land.push_back({ x, z, h, {0} });
 
 				if (fCopyObjects)
 				{
-					// well.. I guess I have to..
 					THING *thing = Things;
 					if (thing) do
 					{
 						if ((int)thing->x == x && (int)thing->z == z) {
-							Preset.Things.push_back({ i, *thing });
+							Preset.Land[i].t = *thing;
 						}
 
 						thing = thing->Next;
@@ -4386,19 +4382,43 @@ up_skip:
 		{
 			if (Preset.Land.size())
 			{
+				struct LandMatrix
+				{
+					WORD h;
+					THING t;
+				};
+
+				Preset.Rotation++;
+				if (Preset.Rotation > 3)
+					Preset.Rotation = 0;
+				
 				auto size = Preset.LandSize + 1;
-				WORD **matrix = new WORD*[size];
+				LandMatrix **matrix = new LandMatrix*[size];
 				for (int i = 0; i < size; i++)
-					matrix[i] = new WORD[size];
+					matrix[i] = new LandMatrix[size];
 
 				int az, ax, idx = 0;
 				az = 0;
+				THING* t;
 				while (az <= Preset.LandSize)
 				{
 					ax = 0;
 					while (ax <= Preset.LandSize)
 					{
-						matrix[ax][az] = Preset.Land[idx].h;
+						matrix[ax][az].h = Preset.Land[idx].h;
+						t = &Preset.Land[idx].t;
+
+						if (t->Idx != 0)
+						{
+							if (t->Thing.Type == T_BUILDING)
+							{
+								t->Thing.Building.Angle += 0x200;
+								if (t->Thing.Building.Angle > ANGLE_270)
+									t->Thing.Building.Angle = ANGLE_0;
+							}
+						}
+
+						matrix[ax][az].t = *t;
 						ax++;
 						idx++;
 					}
@@ -4409,27 +4429,33 @@ up_skip:
 				{
 					for (int j = i; j < size - i - 1; j++)
 					{
-						WORD temp = matrix[i][j];
-						matrix[i][j] = matrix[size - 1 - j][i];
-						matrix[size - 1 - j][i] = matrix[size - 1 - i][size - 1 - j];
-						matrix[size - 1 - i][size - 1 - j] = matrix[j][size - 1 - i];
-						matrix[j][size - 1 - i] = temp;
+						WORD h = matrix[i][j].h;
+						THING t = matrix[i][j].t;
+						memset(&matrix[i][j].t, 0, sizeof(THING));
+						matrix[i][j].h = matrix[size - 1 - j][i].h;
+						matrix[i][j].t = matrix[size - 1 - j][i].t;
+						matrix[size - 1 - j][i].h = matrix[size - 1 - i][size - 1 - j].h;
+						matrix[size - 1 - j][i].t = matrix[size - 1 - i][size - 1 - j].t;
+						matrix[size - 1 - i][size - 1 - j].h = matrix[j][size - 1 - i].h;
+						matrix[size - 1 - i][size - 1 - j].t = matrix[j][size - 1 - i].t;
+						matrix[j][size - 1 - i].h = h;
+						matrix[j][size - 1 - i].t = t;
 					}
 				}
 			
 				Preset.Land.clear();
 				for (int i = 0; i < size; i++)
 				{
-					for (int j = 0; j < size; j++)
+					for (int j = 0; j < size; j++) 
 					{
-						Preset.Land.push_back({ j, i, matrix[j][i] });
+						Preset.Land.push_back({ j, i, matrix[j][i].h, matrix[j][i].t });
 					}
 				}
 
 				for (int i = 0; i < size; i++)
 					delete[] matrix[i];
 				delete[] matrix;
-
+			
 				bKeys[0x52] = 0;
 			}
 		}
@@ -6473,26 +6499,45 @@ _continue:
 						}	
 					}
 
-					for (int k = 0; k < Preset.Things.size(); k++)
+					if (Preset.Land[i].t.Idx != NULL)
 					{
-						if (i == Preset.Things[k].first)
+						if (ObjectsCount < MAX_THINGS)
 						{
-							if (ObjectsCount < MAX_THINGS)
-							{
-								THING *t;
-								t = new THING;
+							THING *t;
+							t = new THING;
 
-								memcpy(t, &Preset.Things[k].second, sizeof(THING));
+							memcpy(t, &Preset.Land[i].t, sizeof(THING));
+
+							//sprintf(str, "Rotation=%d\n", Preset.Rotation);
+							//OutputDebugString(str);
+
+							switch (Preset.Rotation)
+							{
+							case 0:
 								t->x = (float)(int)x + 0.5f;
 								t->z = (float)(int)z + 0.5f;
-								t->Thing.PosX = ((int)(x) * 2) << 8;
-								t->Thing.PosZ = ((int)(z) * 2) << 8;
-								t->Idx = 0;
-
-								LINK(Things, t);
-								ObjectsCount++;
-								DlgSetThingIndex(t);
+								break;
+							case 1:
+								t->x = (float)(int)x + 0.5f;
+								t->z = (float)(int)z - 0.5f;
+								break;
+							case 2:
+								t->x = (float)(int)x - 0.5f;
+								t->z = (float)(int)z - 0.5f;
+								break;
+							case 3:
+								t->x = (float)(int)x - 0.5f;
+								t->z = (float)(int)z + 0.5f;
+								break;
 							}
+
+							t->Thing.PosX = ((int)(t->x) * 2) << 8;
+							t->Thing.PosZ = ((int)(t->z) * 2) << 8;
+							t->Idx = 0;
+
+							LINK(Things, t);
+							ObjectsCount++;
+							DlgSetThingIndex(t);
 						}
 					}
 

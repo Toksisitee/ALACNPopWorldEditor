@@ -235,14 +235,15 @@ struct LandBuffer
 	int x;
 	int z;
 	WORD h;
+	THING t;
 };
 
 struct LandPreset
 {
 	int LandSize;
 	DWORD Flags;
+	UBYTE Rotation;
 	std::vector<LandBuffer> Land;
-	std::vector<std::pair<int, THING>> Things; // Not the best
 };
 
 

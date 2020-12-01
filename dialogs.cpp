@@ -585,7 +585,6 @@ long EngineLoadMapOnly(char *filename)
 	memcpy(temp_land, level2dat->GroundHeight, sizeof(wEngineGround));
 
 	Preset.Land.clear();
-	Preset.Things.clear();
 	for (int z = 0; z < 128; z++)
 	{
 		for (int x = 0; x < 128; x++)
@@ -595,7 +594,7 @@ long EngineLoadMapOnly(char *filename)
 			while (x >= GROUND_X_SIZE) x -= GROUND_X_SIZE;
 			while (z >= GROUND_Z_SIZE) z -= GROUND_Z_SIZE;
 
-			Preset.Land.push_back({ x, z, temp_land[z * GROUND_Z_SIZE + x] });
+			Preset.Land.push_back({ x, z, temp_land[z * GROUND_Z_SIZE + x], {0} });
 		}
 	}
 
