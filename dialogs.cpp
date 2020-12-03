@@ -124,6 +124,7 @@ void DeleteDuplicateTrees()
 	const int nResult = MessageBox(NULL, _T("Are you sure you want to delete duplicate (stacked) trees?"), _T("Delete Trees"), MB_YESNO);
 	if (nResult == IDNO) return;
 
+	SaveThingsUndoState();
 	std::vector<THING*> vecTreesList;
 	int nDeletedTrees = 0;
 	THING *pThing = Things;
@@ -585,6 +586,8 @@ long EngineLoadMapOnly(char *filename)
 	memcpy(temp_land, level2dat->GroundHeight, sizeof(wEngineGround));
 
 	Preset.Land.clear();
+	Preset.Rotation = 0;
+
 	for (int z = 0; z < 128; z++)
 	{
 		for (int x = 0; x < 128; x++)
@@ -2829,6 +2832,8 @@ void SetEditLand()
 	if(fEngineEditLand)
 	{
 		fEngineEditLand = false;
+		memset(wLandPreset, 0, sizeof(wLandPreset));
+		EngineUpdateView();
 	}
 	else
 	{
@@ -2850,11 +2855,13 @@ void SetEditObjects()
 	}
 	else
 	{
+		memset(wLandPreset, 0, sizeof(wLandPreset));
 		fEngineEditLand    = false;
 		fEngineEditObjs    = true;
 		fEngineEditMarkers = false;
 		if(hDlgMarkers) DlgMarkersToggle();
 		if(!hDlgObject) DlgObjectToggle();
+		EngineUpdateView();
 	}
 }
 
@@ -2868,11 +2875,13 @@ void SetEditMarkers()
 	}
 	else
 	{
+		memset(wLandPreset, 0, sizeof(wLandPreset));
 		fEngineEditLand    = false;
 		fEngineEditObjs    = false;
 		fEngineEditMarkers = true;
 		if(hDlgObject) DlgObjectToggle();
 		if(!hDlgMarkers) DlgMarkersToggle();
+		EngineUpdateView();
 	}
 }
 
@@ -3270,8 +3279,10 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_OBJECT_OPTIONS:
 			if(HIWORD(wParam) == BN_CLICKED)
 			{
+
 				if(ThingSelected->Thing.Type == T_BUILDING)
 				{
+					SaveThingsUndoState();
 					switch(ThingSelected->Thing.Building.Angle)
 					{
 					case ANGLE_0:   ThingSelected->Thing.Building.Angle = ANGLE_90;  break;
@@ -3282,6 +3293,7 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 				else if(ThingSelected->Thing.Type == T_SCENERY)
 				{
+					SaveThingsUndoState();
 					switch(ThingSelected->Thing.Scenery.Angle)
 					{
 					case ANGLE_0:   ThingSelected->Thing.Scenery.Angle = ANGLE_45;  break;
@@ -3301,6 +3313,7 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 				else if(ThingSelected->Thing.Type == T_EFFECT && ThingSelected->Thing.Model == M_EFFECT_LAND_BRIDGE)
 				{
+					SaveThingsUndoState();
 					HWND hItem = GetDlgItem(hWnd, IDC_OBJECT_OPTIONS);
 
 					if(ThingSelected->flags & TF_EDIT_LANDBRIDGE)
@@ -3349,6 +3362,7 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_OBJECT_OWNER:
 			if(HIWORD(wParam) == CBN_SELCHANGE)
 			{
+				SaveThingsUndoState();
 				switch(SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0))
 				{
 				case IDX_OWNER_NEUTRAL:
@@ -3388,6 +3402,7 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_OBJECT_TYPE:
 			if(HIWORD(wParam) == CBN_SELCHANGE)
 			{
+				SaveThingsUndoState();
 				ThingSelected->Thing.Model = 1;
 				switch(SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0))
 				{
@@ -3448,6 +3463,7 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_OBJECT_MODEL:
 			if(HIWORD(wParam) == CBN_SELCHANGE)
 			{
+				SaveThingsUndoState();
 				memset(&ThingSelected->Thing.Bluff, 0, sizeof(ThingSelected->Thing.Bluff));
 				switch(ThingSelected->Thing.Type)
 				{
@@ -4977,6 +4993,7 @@ THING* DlgObjectNewObj(float x, float z, UBYTE nType, UBYTE nModel, SBYTE nOwner
 void DlgObjectDeleteObj()
 {
 	if(!ThingSelected) return;
+	SaveThingsUndoState();
 	THING *t = ThingSelected;
 	ThingsIndices[ThingSelected->Idx] = 0;
 
@@ -8830,6 +8847,7 @@ void DlgSwapTribeUpdate(HWND hWnd)
 void DlgSwapTribeSwap(HWND hWnd)
 {
 	if(!Things) return;
+	SaveThingsUndoState();
 
 	int t1, t2, t3, t4;
 	bool f;

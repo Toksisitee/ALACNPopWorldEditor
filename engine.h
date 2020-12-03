@@ -246,6 +246,18 @@ struct LandPreset
 	std::vector<LandBuffer> Land;
 };
 
+struct GroundBuffer
+{
+	WORD EngineGround[MAP_SIZE];
+};
+
+struct ThingsBuffer
+{
+	WORD ThingsIndices[MAX_THINGS];
+	std::vector<THING> Things;
+	bool IsPreset = false;
+};
+
 
 #define FVF_COLORVERTEX (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 
@@ -272,6 +284,11 @@ enum MOUSEBUTTON
 	MouseButtonMiddle
 };
 
+extern WORD wLandPreset[MAP_SIZE];
+extern std::vector<GroundBuffer> vecEngineGroundUndo;
+extern std::vector<GroundBuffer> vecEngineGroundRedo;
+extern std::vector<ThingsBuffer> vecThingsUndo;
+extern std::vector<ThingsBuffer> vecThingsRedo;
 extern LandPreset Preset;
 extern bool bLandPresetMode;
 extern int nFlagPaintSelected;
@@ -394,3 +411,4 @@ extern bool IsNotNeutral(THING *t);
 extern void CopyToClipboard(HWND hwnd, const std::string& s);
 extern void InitMapSaveElements();
 extern int EngineGetRand(int min, int max);
+extern void SaveThingsUndoState();

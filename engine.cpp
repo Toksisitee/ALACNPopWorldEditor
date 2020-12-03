@@ -78,7 +78,7 @@ bool					bEngineSleep			= false,
 						fSmooth					= false,
 						fRaise					= false,
 						fLower					= false,
-						fCopyObjects		    = false,
+						fCopyObjects		    = true,
 						fNewMarkerAdded			= false,
 						fPaintDecorations		= true,
 						fBrushMaxSize			= false,
@@ -88,14 +88,11 @@ POINT					ptCursor,
 						ptCaptured;
 MOUSEBUTTON				MouseButton				= MouseButtonLeft;
 
-
-struct GroundBuffer
-{
-	WORD EngineGround[MAP_SIZE];
-};
-
 std::vector<GroundBuffer> vecEngineGroundUndo;
 std::vector<GroundBuffer> vecEngineGroundRedo;
+std::vector<ThingsBuffer> vecThingsUndo;
+std::vector<ThingsBuffer> vecThingsRedo;
+
 WORD wLandPreset[MAP_SIZE];
 LandPreset Preset;
 
@@ -441,6 +438,35 @@ DWORD LANDSCAPE_COLORS[256] = {
 	0xF4EAD3, 0xF5EAD5, 0xF5EBD7, 0xF5ECD9, 0xF6EDDA, 0xF7EEDD, 0xF7EFDF, 0xF7F0E1,
 	0xF8F1E2, 0xF8F2E4, 0xF9F2E6, 0xF9F3E8, 0xFAF4E9, 0xFAF5EC, 0xFBF6EE, 0xFCF8F1,
 	0xFCF9F3, 0xFDFAF5, 0xFDFBF6, 0xFDFBF8, 0xFEFCFA, 0xFFFEFD, 0xFFFEFE, 0xFFFFFF };
+
+void SaveThingsUndoState()
+{
+	ThingsBuffer buffer;
+
+	THING *thing = Things;
+	if (thing) do
+	{
+		buffer.Things.push_back(*thing);
+		thing = thing->Next;
+	} while (thing != Things);
+
+	memcpy(&buffer.ThingsIndices, &ThingsIndices, sizeof(ThingsIndices));
+	vecThingsUndo.push_back(buffer);
+}
+
+void SaveThingsRedoState()
+{
+	ThingsBuffer buffer;
+	THING *thing = Things;
+	if (thing) do
+	{
+		buffer.Things.push_back(*thing);
+		thing = thing->Next;
+	} while (thing != Things);
+
+	memcpy(&buffer.ThingsIndices, &ThingsIndices, sizeof(ThingsIndices));
+	vecThingsRedo.push_back(buffer);
+}
 
 void GetMatrixFromLand(WORD (&matrix)[128][128], WORD (&land)[128*128])
 {
@@ -2185,7 +2211,10 @@ long EngineDrawObjects()
 				if((ThingSelected->Thing.Type == T_EFFECT) && (ThingSelected->Thing.Model == M_EFFECT_LAND_BRIDGE) && (ThingSelected->flags & TF_EDIT_LANDBRIDGE))
 				{
 					if (ThingSelected->LandBridge.ex != cx || ThingSelected->LandBridge.ez != cz)
+					{
+						SaveThingsUndoState();
 						bNetworkUpdate = true;
+					}
 
 					ThingSelected->LandBridge.x = (float)bx + 0.5f;
 					ThingSelected->LandBridge.z = (float)bz + 0.5f;
@@ -2200,7 +2229,10 @@ long EngineDrawObjects()
 				else
 				{
 					if (ThingSelected->ex != cx || ThingSelected->ez != cz)
+					{
+						SaveThingsUndoState();
 						bNetworkUpdate = true;
+					}
 
 					ThingSelected->x = (float)bx + 0.5f;
 					ThingSelected->z = (float)bz + 0.5f;
@@ -4338,7 +4370,6 @@ up_skip:
 	// ctrl + a (copy whole land)
 	if (bKeys[VK_CONTROL] && bKeys[0x41])
 	{
-		printf("Copy entire land as preset\n");
 		Preset.Rotation = 0;
 		Preset.Land.clear();
 
@@ -4543,53 +4574,226 @@ up_skip:
 	// ctrl + z (undo)
 	if (bKeys[VK_CONTROL] && bKeys[0x5A])
 	{
-		if (vecEngineGroundUndo.size() > 0)
+		if (vecThingsUndo.size() > 0)
 		{
-			// save current state in redo buffer
-			GroundBuffer lbuff;
-			memcpy(lbuff.EngineGround, wEngineGround, sizeof(lbuff.EngineGround));
-			vecEngineGroundRedo.push_back(lbuff);
+			SaveThingsRedoState();
+			struct THING* thing;
 
 			// get undo buffer
-			auto buffer = vecEngineGroundUndo.back();
+			auto buffer = vecThingsUndo.back();
+			auto& buf = vecThingsRedo.back();
+			buf.IsPreset = buffer.IsPreset;
+
 			// set current state from undo buffer
-			memcpy(wEngineGround, buffer.EngineGround, sizeof(wEngineGround));
+			memcpy(&ThingsIndices, &buffer.ThingsIndices, sizeof(ThingsIndices));
+
+			while (Things)
+			{
+				thing = Things;
+				UNLINK(Things, thing);
+				DlgObjectUnlinkObj(thing);
+				ObjectsCount--;
+				delete thing;
+			}
+
+			for (auto const& nt : buffer.Things)
+			{
+				THING *t;
+				t = new THING;
+				*t = nt;
+				LINK(Things, t);
+				//	t->Idx = 0; // ok or not?
+				ObjectsCount++;
+				//	DlgSetThingIndex(t);
+			}
+
+			thing = Things;
+			if (thing) do
+			{
+				if (thing->Thing.Type == T_GENERAL && thing->Thing.Model == M_GENERAL_TRIGGER)
+				{
+					for (int n = 0; n < 10; n++)
+					{
+						if (thing->Thing.Trigger.ThingIdxs[n] != 0) {
+							thing->Links[n] = DlgObjectFindIdx(thing->Thing.Trigger.ThingIdxs[n]);
+						}
+					}
+				}
+
+				thing = thing->Next;
+			} while (thing != Things);
+
+			/*
+			thing = Things;
+			if (thing) do
+			{
+				if (thing->Thing.Type == T_GENERAL && thing->Thing.Model == M_GENERAL_TRIGGER)
+				{
+					auto linkbuffer = buffer.LinkBuffer.back();
+					if (linkbuffer.Links.size())
+					{
+						for (int n = 0; n < 10; n++)
+						{
+							//if (linkbuffer.Links[n] != 0) {
+								thing->Links[n] = DlgObjectFindIdx(linkbuffer.Links[n]);
+							//}
+						}
+					}
+				}
+
+				thing = thing->Next;
+			} while (thing != Things);
+			*/
+
 			EngineUpdateView();
 			EngineUpdateMiniMap();
+			DlgInfoUpdate(hDlgInfo);
 
-			if (vecEngineGroundRedo.size() >= EDITOR_MAX_BUFFER)
-				vecEngineGroundRedo.erase(vecEngineGroundRedo.begin());
+			if (vecThingsRedo.size() >= EDITOR_MAX_BUFFER)
+				vecThingsRedo.erase(vecThingsRedo.begin());
 
-			vecEngineGroundUndo.pop_back();
+			vecThingsUndo.pop_back();
 			bKeys[0x5A] = 0; // hacky fix; adds delay between each undo
+
+			if (!buffer.IsPreset)
+				goto notpreset;
+		}
+	//	else
+		{
+			if (vecEngineGroundUndo.size() > 0)
+			{
+				// save current state in redo buffer
+				GroundBuffer lbuff;
+				memcpy(lbuff.EngineGround, wEngineGround, sizeof(lbuff.EngineGround));
+				vecEngineGroundRedo.push_back(lbuff);
+
+				// get undo buffer
+				auto buffer = vecEngineGroundUndo.back();
+				// set current state from undo buffer
+				memcpy(wEngineGround, buffer.EngineGround, sizeof(wEngineGround));
+				EngineUpdateView();
+				EngineUpdateMiniMap();
+
+				if (vecEngineGroundRedo.size() >= EDITOR_MAX_BUFFER)
+					vecEngineGroundRedo.erase(vecEngineGroundRedo.begin());
+
+				vecEngineGroundUndo.pop_back();
+				bKeys[0x5A] = 0; // hacky fix; adds delay between each undo
+			}
 		}
 	}
 	
 	// ctrl + y (redo)
 	if (bKeys[VK_CONTROL] && bKeys[0x59])
 	{
-		if (vecEngineGroundRedo.size() > 0)
+		if (vecThingsRedo.size() > 0)
 		{
 			// save current state in undo buffer
-			GroundBuffer lbuff;
-			memcpy(lbuff.EngineGround, wEngineGround, sizeof(lbuff.EngineGround));
-			vecEngineGroundUndo.push_back(lbuff);
+			SaveThingsUndoState();
+			struct THING* thing;
 
 			// get redo buffer
-			auto buffer = vecEngineGroundRedo.back();
+			auto buffer = vecThingsRedo.back();
+			auto& buf = vecThingsUndo.back();
+			buf.IsPreset = buffer.IsPreset;
 
 			// set current state from redo buffer
-			memcpy(wEngineGround, buffer.EngineGround, sizeof(wEngineGround));
+			memcpy(&ThingsIndices, &buffer.ThingsIndices, sizeof(ThingsIndices));
+
+			while (Things)
+			{
+				thing = Things;
+				UNLINK(Things, thing);
+				DlgObjectUnlinkObj(thing);
+				ObjectsCount--;
+				delete thing;
+			}
+
+			for (auto const& nt : buffer.Things)
+			{
+				THING *t;
+				t = new THING;
+				*t = nt;
+				LINK(Things, t);
+				//	t->Idx = 0; // ok or not?
+				ObjectsCount++;
+				//	DlgSetThingIndex(t);
+			}
+
+			thing = Things;
+			if (thing) do
+			{
+				if (thing->Thing.Type == T_GENERAL && thing->Thing.Model == M_GENERAL_TRIGGER)
+				{
+					for (int n = 0; n < 10; n++)
+					{
+						if (thing->Thing.Trigger.ThingIdxs[n] != 0) {
+							thing->Links[n] = DlgObjectFindIdx(thing->Thing.Trigger.ThingIdxs[n]);
+						}
+					}
+				}
+
+				thing = thing->Next;
+			} while (thing != Things);
+
+			/*
+			thing = Things;
+			if (thing) do
+			{
+				if (thing->Thing.Type == T_GENERAL && thing->Thing.Model == M_GENERAL_TRIGGER)
+				{
+					auto linkbuffer = buffer.LinkBuffer.back();
+
+					for (int n = 0; n < 10; n++)
+					{
+						thing->Links[n] = DlgObjectFindIdx(linkbuffer.Links[n]);
+					}
+				}
+
+				thing = thing->Next;
+			} while (thing != Things);
+			*/
+
 			EngineUpdateView();
 			EngineUpdateMiniMap();
+			DlgInfoUpdate(hDlgInfo);
 
-			if (vecEngineGroundUndo.size() >= EDITOR_MAX_BUFFER)
-				vecEngineGroundUndo.erase(vecEngineGroundUndo.begin());
+			if (vecThingsUndo.size() >= EDITOR_MAX_BUFFER)
+				vecThingsUndo.erase(vecThingsUndo.begin());
 
-			vecEngineGroundRedo.pop_back();
+			vecThingsRedo.pop_back();
 			bKeys[0x59] = 0; // hacky fix; adds delay between each undo
+
+			if (!buffer.IsPreset)
+				goto notpreset;
+		}
+	//	else
+		{
+			if (vecEngineGroundRedo.size() > 0)
+			{
+				// save current state in undo buffer
+				GroundBuffer lbuff;
+				memcpy(lbuff.EngineGround, wEngineGround, sizeof(lbuff.EngineGround));
+				vecEngineGroundUndo.push_back(lbuff);
+
+				// get redo buffer
+				auto buffer = vecEngineGroundRedo.back();
+
+				// set current state from redo buffer
+				memcpy(wEngineGround, buffer.EngineGround, sizeof(wEngineGround));
+				EngineUpdateView();
+				EngineUpdateMiniMap();
+
+				if (vecEngineGroundUndo.size() >= EDITOR_MAX_BUFFER)
+					vecEngineGroundUndo.erase(vecEngineGroundUndo.begin());
+
+				vecEngineGroundRedo.pop_back();
+				bKeys[0x59] = 0; // hacky fix; adds delay between each undo
+			}
 		}
 	}
+
+notpreset:
 
 	if(UpdateView)
 	{
@@ -5346,6 +5550,12 @@ void EngineNewMap()
 	EngineUpdateMiniMap();
 	UpdateHeaderDialogs();
 	DlgMarkersUpdate(hDlgMarkers);
+
+	Preset.Land.clear();
+	vecEngineGroundRedo.clear();
+	vecEngineGroundUndo.clear();
+	vecThingsRedo.clear();
+	vecThingsUndo.clear();
 
 	szLevel[0] = 0;
 	DlgInfoUpdate(hDlgInfo);
@@ -6435,6 +6645,13 @@ _continue:
 
 		if (Preset.Land.size() && bLandPresetMode)
 		{
+			if (fCopyObjects)
+			{
+				SaveThingsUndoState();
+				auto& buf = vecThingsUndo.back();
+				buf.IsPreset = true;
+			}
+
 			int x, z, az, ax, sx, sz, i = 0, j = 0;
 			float ex, ez;
 			WORD h, h2;
@@ -6499,45 +6716,48 @@ _continue:
 						}	
 					}
 
-					if (Preset.Land[i].t.Idx != NULL)
+					if (fCopyObjects)
 					{
-						if (ObjectsCount < MAX_THINGS)
+						if (Preset.Land[i].t.Idx != NULL)
 						{
-							THING *t;
-							t = new THING;
-
-							memcpy(t, &Preset.Land[i].t, sizeof(THING));
-
-							//sprintf(str, "Rotation=%d\n", Preset.Rotation);
-							//OutputDebugString(str);
-
-							switch (Preset.Rotation)
+							if (ObjectsCount < MAX_THINGS)
 							{
-							case 0:
-								t->x = (float)(int)x + 0.5f;
-								t->z = (float)(int)z + 0.5f;
-								break;
-							case 1:
-								t->x = (float)(int)x + 0.5f;
-								t->z = (float)(int)z - 0.5f;
-								break;
-							case 2:
-								t->x = (float)(int)x - 0.5f;
-								t->z = (float)(int)z - 0.5f;
-								break;
-							case 3:
-								t->x = (float)(int)x - 0.5f;
-								t->z = (float)(int)z + 0.5f;
-								break;
+								THING *t;
+								t = new THING;
+
+								memcpy(t, &Preset.Land[i].t, sizeof(THING));
+
+								//sprintf(str, "Rotation=%d\n", Preset.Rotation);
+								//OutputDebugString(str);
+
+								switch (Preset.Rotation)
+								{
+								case 0:
+									t->x = (float)(int)x + 0.5f;
+									t->z = (float)(int)z + 0.5f;
+									break;
+								case 1:
+									t->x = (float)(int)x + 0.5f;
+									t->z = (float)(int)z - 0.5f;
+									break;
+								case 2:
+									t->x = (float)(int)x - 0.5f;
+									t->z = (float)(int)z - 0.5f;
+									break;
+								case 3:
+									t->x = (float)(int)x - 0.5f;
+									t->z = (float)(int)z + 0.5f;
+									break;
+								}
+
+								t->Thing.PosX = ((int)(t->x) * 2) << 8;
+								t->Thing.PosZ = ((int)(t->z) * 2) << 8;
+								t->Idx = 0;
+
+								LINK(Things, t);
+								ObjectsCount++;
+								DlgSetThingIndex(t);
 							}
-
-							t->Thing.PosX = ((int)(t->x) * 2) << 8;
-							t->Thing.PosZ = ((int)(t->z) * 2) << 8;
-							t->Idx = 0;
-
-							LINK(Things, t);
-							ObjectsCount++;
-							DlgSetThingIndex(t);
 						}
 					}
 
@@ -6549,6 +6769,7 @@ _continue:
 
 			EngineUpdateView();
 			EngineUpdateMiniMap();
+			DlgInfoUpdate(hDlgInfo);
 		}
 
 		EngineMouseSetCapture();
@@ -6636,14 +6857,20 @@ void EngineMouseRDown()
 {
 	if(fEngineEditLand)
 	{
-		bLandPresetMode = false;
+		if (bLandPresetMode) {
+			bLandPresetMode = false;
+			memset(wLandPreset, 0, sizeof(wLandPreset));
+			EngineUpdateView();
+		}
+		else
+		{
+			GroundBuffer buffer;
+			memcpy(buffer.EngineGround, wEngineGround, sizeof(buffer.EngineGround));
+			vecEngineGroundUndo.push_back(buffer);
 
-		GroundBuffer buffer;
-		memcpy(buffer.EngineGround, wEngineGround, sizeof(buffer.EngineGround));
-		vecEngineGroundUndo.push_back(buffer);
-
-		EngineMouseSetCapture();
-		MouseButton = MouseButtonRight;
+			EngineMouseSetCapture();
+			MouseButton = MouseButtonRight;
+		}
 	}
 }
 
