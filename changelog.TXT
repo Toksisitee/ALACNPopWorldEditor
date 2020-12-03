@@ -1,3 +1,14 @@
+Version: 1.7.0
+Date: Dec 3 2020
+Author: Toksisitee
+
+* Removed console window.
+* You can now undo/redo object changes. (e.g. changing the owner, moving an object, etc.)
+* Undo/redo buffers are now being cleared when opening/creating a new map.
+* Canceling Land Preset mode (RMB) will no longer lower the land in the brush radius for a split second.
+* Land Preset preview will be cleared upon changing from Landscape mode to something else (e.g to Objects or Markers mode).
+
+
 Version: 1.6.0
 Date: Nov 30 2020
 Author: Toksisitee
