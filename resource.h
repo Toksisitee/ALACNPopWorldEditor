@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Включаемый файл, созданный в Microsoft Visual C++.
-// Используется PopEdt.rc
+// Microsoft Visual C++ generated include file.
+// Used by PopEdt.rc
 //
 #define BUILD_INCREMENT                 0
 #define RC_MANIFEST                     1
@@ -82,16 +82,16 @@
 #define ID_FILE_SYNC_MAP                345
 #define ID_MACRO                        346
 #define ID_RESET_MARKERS                347
-#define ID_OPTIONS_CENTERTHINGS			348
-#define ID_IMPORT_MAP_PRESET			349
-#define IDD_FLAGS_BRUSH					350
-#define ID_OPTIONS_FLAGS_BRUSH			351
-#define ID_DELETE_DUPLICATE_TREES		352
-#define ID_DELETE_WILDS					353
-#define ID_ROTATE_BUILDINGS				354
-#define	ID_ROTATE_TREES					355
-#define ID_NEUTRALIZER					356
-#define ID_LEVL3_TO_LEVL2				357
+#define ID_OPTIONS_CENTERTHINGS         348
+#define ID_IMPORT_MAP_PRESET            349
+#define IDD_FLAGS_BRUSH                 350
+#define ID_OPTIONS_FLAGS_BRUSH          351
+#define ID_DELETE_DUPLICATE_TREES       352
+#define ID_DELETE_WILDS                 353
+#define ID_ROTATE_BUILDINGS             354
+#define ID_ROTATE_TREES                 355
+#define ID_NEUTRALIZER                  356
+#define ID_LEVL3_TO_LEVL2               357
 #define IDC_MENUBAR_FILE                1001
 #define IDC_MENUBAR_EDIT                1002
 #define IDC_MENUBAR_OPTIONS             1003
@@ -284,9 +284,13 @@
 #define IDC_AI_SRC                      1194
 #define IDC_AI_DST                      1195
 #define IDC_SCRIPT2                     1196
+#define IDC_FIRST_SWAP_TRIBE_SOURCE_DROP_DOWN 1196
 #define IDC_SCRIPT2_1                   1197
+#define IDC_FIRST_SWAP_TRIBE_DESTINATION_DROP_DOWN 1197
 #define IDC_SCRIPT2_2                   1198
+#define IDC_SECOND_SWAP_TRIBE_SOURCE_DROP_DOWN 1198
 #define IDC_SCRIPT2_3                   1199
+#define IDC_SECOND_SWAP_TRIBE_DESTINATION_DROP_DOWN 1199
 #define IDC_SCRIPT2_4                   1200
 #define IDC_SCRIPT2_5                   1201
 #define IDC_SCRIPT2_6                   1202
@@ -333,10 +337,10 @@
 #define IDC_FILTER_MAGENTA              1243
 #define IDC_FILTER_BLACK                1244
 #define IDC_FILTER_ORANGE               1245
-#define IDC_FLAG_PAINT					1246
-#define IDC_FLAG_BRUSH_VALUE			1247
+#define IDC_FLAG_PAINT                  1246
+#define IDC_FLAG_BRUSH_VALUE            1247
 #define IDC_FLAG_BRUSH_VALUE_TXT        1248
-#define IDC_BRUSH_COPY_OBJECTS			1249
+#define IDC_BRUSH_COPY_OBJECTS          1249
 #define ID_ACCEL_DLGDEVICE              40001
 #define ID_ACCEL_MENUBAR                40002
 #define ID_ACCEL_DLGBRUSH               40003
@@ -367,7 +371,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        172
 #define _APS_NEXT_COMMAND_VALUE         40020
-#define _APS_NEXT_CONTROL_VALUE         1196
+#define _APS_NEXT_CONTROL_VALUE         1197
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif

@@ -502,6 +502,16 @@ http://alacn.dnsalias.org:8080/
 #define OFF_ORANGE									0x00080000
 #define OFF_ALL										0xFFFFFFFF
 
+// SWAP TRIBE CONSTANTS.
+constexpr int BLUE_TRIBE_SWAP_DROP_DOWN_INDEX = 0;
+constexpr int RED_TRIBE_SWAP_DROP_DOWN_INDEX = 1;
+constexpr int YELLOW_TRIBE_SWAP_DROP_DOWN_INDEX = 2;
+constexpr int GREEN_TRIBE_SWAP_DROP_DOWN_INDEX = 3;
+constexpr int CYAN_TRIBE_SWAP_DROP_DOWN_INDEX = 4;
+constexpr int MAGENTA_TRIBE_SWAP_DROP_DOWN_INDEX = 5;
+constexpr int BLACK_TRIBE_SWAP_DROP_DOWN_INDEX = 6;
+constexpr int ORANGE_TRIBE_SWAP_DROP_DOWN_INDEX = 7;
+constexpr int NEUTRAL_TRIBE_SWAP_DROP_DOWN_INDEX = 8;
 
 extern std::string strMacro;
 extern BYTE nSelectPriority;

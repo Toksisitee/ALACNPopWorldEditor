@@ -13,11 +13,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Нейтральный resources
+// Neutral resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(1251)
+#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -28,12 +28,12 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 // remains consistent on all systems.
 IDI_CN                  ICON                    "cn.ico"
 
-#endif    // Нейтральный resources
+#endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// Португальский (Бразилия) resources
+// Portuguese (Brazil) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PTB)
 LANGUAGE LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN
@@ -133,7 +133,7 @@ BEGIN
     CONTROL         "Smooth",IDC_BRUSH_SMOOTH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,80,44,10
     CONTROL         "Raise",IDC_BRUSH_ONLY_RAISE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,90,44,10
     CONTROL         "Lower",IDC_BRUSH_ONLY_LOWER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,100,44,10
-	CONTROL         "Copy Objects", IDC_BRUSH_COPY_OBJECTS, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 7, 110, 44, 10
+    CONTROL         "Copy Objects",IDC_BRUSH_COPY_OBJECTS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,110,44,10
 END
 
 IDD_FLAGS_BRUSH DIALOGEX 0, 0, 88, 127
@@ -142,10 +142,9 @@ EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Flags Brush"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-CONTROL         "Flag Paint", IDC_FLAG_PAINT, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 7, 6, 44, 10
-LTEXT           "Flag Value", IDC_FLAG_BRUSH_VALUE_TXT, 7, 20, 44, 8
-CONTROL         "", IDC_FLAG_BRUSH_VALUE, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 7, 30, 44, 13
-
+    CONTROL         "Flag Paint",IDC_FLAG_PAINT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,6,44,10
+    LTEXT           "Flag Value",IDC_FLAG_BRUSH_VALUE_TXT,7,20,44,8
+    CONTROL         "",IDC_FLAG_BRUSH_VALUE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,7,30,44,13
 END
 
 IDD_OBJECT DIALOGEX 0, 0, 106, 148
@@ -281,22 +280,18 @@ EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Populous World Editor (Toksisitee)"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-	ICON            IDI_CN, IDC_STATIC, 142, 7, 21, 20
-	LTEXT           "This build is maintained by Toksisitee.", IDC_STATIC, 7, 7, 140, 8
-
-	LTEXT           "- Authors -", IDC_STATIC, 7, 37, 88, 8
+    ICON            IDI_CN,IDC_STATIC,142,7,21,20
+    LTEXT           "This build is maintained by Toksisitee.",IDC_STATIC,7,7,140,8
+    LTEXT           "- Authors -",IDC_STATIC,7,37,88,8
     LTEXT           "ALACN: original author",IDC_STATIC,7,47,88,8
-		LTEXT           "alacn@bol.com.br", IDC_STATIC, 17, 55, 88, 8
-		LTEXT           "uhahaa@msn.com", IDC_STATIC, 17, 65, 88, 8
-		LTEXT           "http://alacn1.com/populous/", IDC_ABOUT_LINK, 17,75, 135, 8
-	LTEXT           "Toksisitee: updates (fixes and new features)", IDC_STATIC, 7, 97, 150, 8
-		LTEXT           "github.com/Toksisitee", IDC_STATIC, 17, 105, 88, 8
-	//LTEXT           "MrKosjaK: sprite/model previews for 8p tribes.", IDC_STATIC, 7, 107, 150, 8
-	//LTEXT           "Brandan: support for beta Levl3 format.", IDC_STATIC, 7, 117, 150, 8
-
+    LTEXT           "alacn@bol.com.br",IDC_STATIC,17,55,88,8
+    LTEXT           "uhahaa@msn.com",IDC_STATIC,17,65,88,8
+    LTEXT           "http://alacn1.com/populous/",IDC_ABOUT_LINK,17,75,135,8
+    LTEXT           "Toksisitee: updates (fixes and new features)",IDC_STATIC,7,97,150,8
+    LTEXT           "github.com/Toksisitee",IDC_STATIC,17,105,88,8
     LTEXT           "Version: ---",IDC_ABOUT_VERSION,7,139,135,8
     LTEXT           "Date: ---",IDC_ABOUT_DATE,8,149,135,8
-	DEFPUSHBUTTON   "OK", IDOK, 49, 160, 50, 14
+    DEFPUSHBUTTON   "OK",IDOK,49,160,50,14
 END
 
 IDD_SPELLS_BUILDINGS DIALOGEX 0, 0, 242, 122
@@ -507,38 +502,22 @@ BEGIN
     LTEXT           "-",IDC_INFO_LEVEL_NAME,57,15,87,8
 END
 
-IDD_SWAP_TRIBE DIALOGEX 0, 0, 127, 214
+IDD_SWAP_TRIBE DIALOGEX 0, 0, 245, 88
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Swap Tribe"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    GROUPBOX        "",IDC_STATIC,7,7,54,78
-    CONTROL         "Blue",IDC_SWAPTRIBE_BLUE1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,13,19,42,10
-    CONTROL         "Red",IDC_SWAPTRIBE_RED1,"Button",BS_AUTORADIOBUTTON,13,31,42,10
-    CONTROL         "Yellow",IDC_SWAPTRIBE_YELLOW1,"Button",BS_AUTORADIOBUTTON,13,43,42,10
-    CONTROL         "Green",IDC_SWAPTRIBE_GREEN1,"Button",BS_AUTORADIOBUTTON,13,55,42,10
-    CONTROL         "Neutral",IDC_SWAPTRIBE_NEUTRAL1,"Button",BS_AUTORADIOBUTTON,13,67,42,10
-    CONTROL         "Swap Two",IDC_SWAPTRIBE_SWAP2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,174,50,10
-    PUSHBUTTON      "Swap",IDC_SWAPTRIBE_SWAP,38,192,50,14
-    GROUPBOX        "",IDC_STATIC,66,7,54,78
-    CONTROL         "Blue",IDC_SWAPTRIBE_BLUE2,"Button",BS_AUTORADIOBUTTON | WS_GROUP,72,19,42,10
-    CONTROL         "Red",IDC_SWAPTRIBE_RED2,"Button",BS_AUTORADIOBUTTON,72,31,42,10
-    CONTROL         "Yellow",IDC_SWAPTRIBE_YELLOW2,"Button",BS_AUTORADIOBUTTON,72,43,42,10
-    CONTROL         "Green",IDC_SWAPTRIBE_GREEN2,"Button",BS_AUTORADIOBUTTON,72,55,42,10
-    CONTROL         "Neutral",IDC_SWAPTRIBE_NEUTRAL2,"Button",BS_AUTORADIOBUTTON,72,67,42,10
-    GROUPBOX        "",IDC_STATIC,7,90,54,78
-    CONTROL         "Blue",IDC_SWAPTRIBE_BLUE3,"Button",BS_AUTORADIOBUTTON | WS_GROUP,13,102,42,10
-    CONTROL         "Red",IDC_SWAPTRIBE_RED3,"Button",BS_AUTORADIOBUTTON,13,114,42,10
-    CONTROL         "Yellow",IDC_SWAPTRIBE_YELLOW3,"Button",BS_AUTORADIOBUTTON,13,126,42,10
-    CONTROL         "Green",IDC_SWAPTRIBE_GREEN3,"Button",BS_AUTORADIOBUTTON,13,138,42,10
-    CONTROL         "Neutral",IDC_SWAPTRIBE_NEUTRAL3,"Button",BS_AUTORADIOBUTTON,13,150,42,10
-    GROUPBOX        "",IDC_STATIC,66,90,54,78
-    CONTROL         "Blue",IDC_SWAPTRIBE_BLUE4,"Button",BS_AUTORADIOBUTTON | WS_GROUP,72,102,42,10
-    CONTROL         "Red",IDC_SWAPTRIBE_RED4,"Button",BS_AUTORADIOBUTTON,72,114,42,10
-    CONTROL         "Yellow",IDC_SWAPTRIBE_YELLOW4,"Button",BS_AUTORADIOBUTTON,72,126,42,10
-    CONTROL         "Green",IDC_SWAPTRIBE_GREEN4,"Button",BS_AUTORADIOBUTTON,72,138,42,10
-    CONTROL         "Neutral",IDC_SWAPTRIBE_NEUTRAL4,"Button",BS_AUTORADIOBUTTON,72,150,42,10
+    CONTROL         "Swap Two",IDC_SWAPTRIBE_SWAP2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,69,50,10
+    PUSHBUTTON      "Swap",IDC_SWAPTRIBE_SWAP,182,67,50,14
+    COMBOBOX        IDC_FIRST_SWAP_TRIBE_SOURCE_DROP_DOWN,22,18,96,57,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FIRST_SWAP_TRIBE_DESTINATION_DROP_DOWN,136,18,96,57,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "First Swap",IDC_STATIC,7,7,230,27
+    COMBOBOX        IDC_SECOND_SWAP_TRIBE_SOURCE_DROP_DOWN,22,49,96,57,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_SECOND_SWAP_TRIBE_DESTINATION_DROP_DOWN,136,49,96,57,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Second Swap",IDC_STATIC,7,38,230,27
+    CTEXT           "->",IDC_STATIC,122,20,9,8
+    CTEXT           "->",IDC_STATIC,122,51,9,8
 END
 
 IDD_MARKERS DIALOGEX 0, 0, 88, 68
@@ -666,13 +645,13 @@ BEGIN
         BOTTOMMARGIN, 80
     END
 
-	IDD_FLAGS_BRUSH, DIALOG
-	BEGIN
-		LEFTMARGIN, 7
-		RIGHTMARGIN, 51
-		TOPMARGIN, 6
-		BOTTOMMARGIN, 80
-	END
+    IDD_FLAGS_BRUSH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 51
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 80
+    END
 
     IDD_OBJECT, DIALOG
     BEGIN
@@ -812,9 +791,9 @@ BEGIN
     IDD_SWAP_TRIBE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 120
+        RIGHTMARGIN, 238
         TOPMARGIN, 7
-        BOTTOMMARGIN, 207
+        BOTTOMMARGIN, 81
     END
 
     IDD_MARKERS, DIALOG
@@ -867,7 +846,7 @@ BEGIN
         MENUITEM "Save As...\tCtrl + Shift + S", ID_FILE_LEVEL_SAVE_AS
         MENUITEM SEPARATOR
         MENUITEM "Export Height Map",           ID_FILE_EXPORTHEIGHTMAP
-		MENUITEM "Import Level (as Land Preset)",ID_IMPORT_MAP_PRESET
+        MENUITEM "Import Level (as Land Preset)", ID_IMPORT_MAP_PRESET
         MENUITEM SEPARATOR
         MENUITEM "Host",                        ID_FILE_HOST
         MENUITEM "Join",                        ID_FILE_CLIENT
@@ -905,20 +884,19 @@ BEGIN
             MENUITEM "Language To Plain Text",      ID_LANGUAGE_LANG2TEXT
             MENUITEM "Plain Text To Language",      ID_LANGUAGE_TEXT2LANG
         END
-
-		POPUP "Tools"
-		BEGIN
-			MENUITEM "Swap Tribe", ID_EDIT_SWAPTRIBE
-			MENUITEM "Rotate Buildings", ID_ROTATE_BUILDINGS
-			MENUITEM "Rotate Trees", ID_ROTATE_TREES
-			MENUITEM "Delete Duplicate Trees", ID_DELETE_DUPLICATE_TREES
-			MENUITEM "Delete Wildmen", ID_DELETE_WILDS
-			MENUITEM "Delete All Objects", ID_PURGE_OBJECTS
-			MENUITEM "Neutralizer", ID_NEUTRALIZER
-			MENUITEM "Levl3 to Levl2 Convert", ID_LEVL3_TO_LEVL2
-			MENUITEM "Reset Markers", ID_RESET_MARKERS
-			MENUITEM "Macro", ID_MACRO
-		END
+        POPUP "Tools"
+        BEGIN
+            MENUITEM "Swap Tribe",                  ID_EDIT_SWAPTRIBE
+            MENUITEM "Rotate Buildings",            ID_ROTATE_BUILDINGS
+            MENUITEM "Rotate Trees",                ID_ROTATE_TREES
+            MENUITEM "Delete Duplicate Trees",      ID_DELETE_DUPLICATE_TREES
+            MENUITEM "Delete Wildmen",              ID_DELETE_WILDS
+            MENUITEM "Delete All Objects",          ID_PURGE_OBJECTS
+            MENUITEM "Neutralizer",                 ID_NEUTRALIZER
+            MENUITEM "Levl3 to Levl2 Convert",      ID_LEVL3_TO_LEVL2
+            MENUITEM "Reset Markers",               ID_RESET_MARKERS
+            MENUITEM "Macro",                       ID_MACRO
+        END
     END
 END
 
@@ -928,7 +906,7 @@ BEGIN
     BEGIN
         MENUITEM "Object List\tF4",             ID_OPTIONS_OBJECTLIST
         MENUITEM "Brush\tF3",                   ID_OPTIONS_BRUSH
-		MENUITEM "Flags Brush",					ID_OPTIONS_FLAGS_BRUSH
+        MENUITEM "Flags Brush",                 ID_OPTIONS_FLAGS_BRUSH
         MENUITEM "Info",                        ID_OPTIONS_INFO
         MENUITEM SEPARATOR
         MENUITEM "Hide Objects",                ID_OPTIONS_HIDEOBJECTS
@@ -989,7 +967,7 @@ BEGIN
     VK_F7,          ID_ACCEL_MARKERS,       VIRTKEY, NOINVERT
 END
 
-#endif    // Португальский (Бразилия) resources
+#endif    // Portuguese (Brazil) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

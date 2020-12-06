@@ -8523,324 +8523,37 @@ void DlgSwapTribeToggle()
 
 void DlgSwapTribeUpdate(HWND hWnd)
 {
+	// EXIT IF THE WINDOW HANDLE IS INVALID.
 	if(!hWnd) return;
 
-	//
+	// Create a lambda function for setting the enablement state of a tribe swap drop-down box to making
+	// updating the drop-down simpler.
+	const auto set_tribe_swap_drop_down_enablement = [hWnd](const int dialog_item_index, const bool enabled)
+	{
+		// RETRIEVE THE DROP-DOWN BOX.
+		HWND hItem = GetDlgItem(hWnd, dialog_item_index);
+		const bool item_handle_valid = (NULL != hItem);
+		if (!item_handle_valid)
+		{
+			// The drop-down cannot be updated since it is not valid.
+			return;
+		}
 
-	bool b[4][5];
-	memset(b, 1, sizeof(b));
+		// SET THE SELECTED TRIBE.
+		constexpr int NO_SELECTION = -1;
+		WPARAM selected_tribe_index = enabled?
+			BLUE_TRIBE_SWAP_DROP_DOWN_INDEX :
+			NO_SELECTION;
+		SendMessage(hItem, CB_SETCURSEL, selected_tribe_index, 0);
 
-	if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE1) == BST_CHECKED)
-	{
-		b[1][0] = false;
-		b[2][0] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED1) == BST_CHECKED)
-	{
-		b[1][1] = false;
-		b[2][1] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW1) == BST_CHECKED)
-	{
-		b[1][2] = false;
-		b[2][2] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN1) == BST_CHECKED)
-	{
-		b[1][3] = false;
-		b[2][3] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL1) == BST_CHECKED)
-	{
-		b[1][4] = false;
-		b[2][4] = false;
-	}
+		// UPDATE THE ENABLED STATE.
+		EnableWindow(hItem, static_cast<BOOL>(enabled));
+	};
 
-	if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE3) == BST_CHECKED)
-	{
-		b[0][0] = false;
-		b[3][0] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED3) == BST_CHECKED)
-	{
-		b[0][1] = false;
-		b[3][1] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW3) == BST_CHECKED)
-	{
-		b[0][2] = false;
-		b[3][2] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN3) == BST_CHECKED)
-	{
-		b[0][3] = false;
-		b[3][3] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL3) == BST_CHECKED)
-	{
-		b[0][4] = false;
-		b[3][4] = false;
-	}
-
-	if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE2) == BST_CHECKED)
-	{
-		b[0][0] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED2) == BST_CHECKED)
-	{
-		b[0][1] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW2) == BST_CHECKED)
-	{
-		b[0][2] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN2) == BST_CHECKED)
-	{
-		b[0][3] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL2) == BST_CHECKED)
-	{
-		b[0][4] = false;
-	}
-
-	if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE4) == BST_CHECKED)
-	{
-		b[2][0] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED4) == BST_CHECKED)
-	{
-		b[2][1] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW4) == BST_CHECKED)
-	{
-		b[2][2] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN4) == BST_CHECKED)
-	{
-		b[2][3] = false;
-	}
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL4) == BST_CHECKED)
-	{
-		b[2][4] = false;
-	}
-
-	//
-
-	if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_SWAP2) != BST_CHECKED)
-	{
-		b[2][0] = false;
-		b[2][1] = false;
-		b[2][2] = false;
-		b[2][3] = false;
-		b[2][4] = false;
-		b[3][0] = false;
-		b[3][1] = false;
-		b[3][2] = false;
-		b[3][3] = false;
-		b[3][4] = false;
-	}
-
-	//
-
-	if(b[0][0])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE1), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE1), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_BLUE1, BST_UNCHECKED);
-	}
-
-	if(b[0][1])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED1), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED1), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_RED1, BST_UNCHECKED);
-	}
-
-	if(b[0][2])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW1), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW1), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_YELLOW1, BST_UNCHECKED);
-	}
-
-	if(b[0][3])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN1), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN1), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_GREEN1, BST_UNCHECKED);
-	}
-
-	if(b[0][4])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL1), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL1), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_NEUTRAL1, BST_UNCHECKED);
-	}
-
-	if(b[1][0])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE2), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE2), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_BLUE2, BST_UNCHECKED);
-	}
-
-	if(b[1][1])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED2), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED2), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_RED2, BST_UNCHECKED);
-	}
-
-	if(b[1][2])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW2), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW2), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_YELLOW2, BST_UNCHECKED);
-	}
-
-	if(b[1][3])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN2), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN2), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_GREEN2, BST_UNCHECKED);
-	}
-
-	if(b[1][4])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL2), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL2), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_NEUTRAL2, BST_UNCHECKED);
-	}
-
-	if(b[2][0])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE3), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE3), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_BLUE3, BST_UNCHECKED);
-	}
-
-	if(b[2][1])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED3), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED3), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_RED3, BST_UNCHECKED);
-	}
-
-	if(b[2][2])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW3), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW3), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_YELLOW3, BST_UNCHECKED);
-	}
-
-	if(b[2][3])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN3), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN3), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_GREEN3, BST_UNCHECKED);
-	}
-
-	if(b[2][4])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL3), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL3), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_NEUTRAL3, BST_UNCHECKED);
-	}
-
-	if(b[3][0])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE4), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_BLUE4), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_BLUE4, BST_UNCHECKED);
-	}
-
-	if(b[3][1])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED4), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_RED4), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_RED4, BST_UNCHECKED);
-	}
-
-	if(b[3][2])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW4), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_YELLOW4), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_YELLOW4, BST_UNCHECKED);
-	}
-
-	if(b[3][3])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN4), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_GREEN4), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_GREEN4, BST_UNCHECKED);
-	}
-
-	if(b[3][4])
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL4), true);
-	}
-	else
-	{
-		EnableWindow(GetDlgItem(hWnd, IDC_SWAPTRIBE_NEUTRAL4), false);
-		CheckDlgButton(hWnd, IDC_SWAPTRIBE_NEUTRAL4, BST_UNCHECKED);
-	}
+	// UPDATE THE DROP-DOWN CONTROLS FOR THE SECOND SWAP.
+	const bool swap_two_enabled = (IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_SWAP2) == BST_CHECKED);
+	set_tribe_swap_drop_down_enablement(IDC_SECOND_SWAP_TRIBE_SOURCE_DROP_DOWN, swap_two_enabled);
+	set_tribe_swap_drop_down_enablement(IDC_SECOND_SWAP_TRIBE_DESTINATION_DROP_DOWN, swap_two_enabled);
 }
 
 
@@ -8849,72 +8562,73 @@ void DlgSwapTribeSwap(HWND hWnd)
 	if(!Things) return;
 	SaveThingsUndoState();
 
-	int t1, t2, t3, t4;
-	bool f;
-
-	f = IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_SWAP2) == BST_CHECKED;
-
-	if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE1) == BST_CHECKED)
-		t1 = OWNER_BLUE;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED1) == BST_CHECKED)
-		t1 = OWNER_RED;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW1) == BST_CHECKED)
-		t1 = OWNER_YELLOW;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN1) == BST_CHECKED)
-		t1 = OWNER_GREEN;
-    else if (IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_HOSTBOT1) == BST_CHECKED)
-        t2 = OWNER_HOSTBOT;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL1) == BST_CHECKED)
-		t1 = OWNER_NEUTRAL;
-	else
-		return;
-
-	if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE2) == BST_CHECKED)
-		t2 = OWNER_BLUE;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED2) == BST_CHECKED)
-		t2 = OWNER_RED;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW2) == BST_CHECKED)
-		t2 = OWNER_YELLOW;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN2) == BST_CHECKED)
-		t2 = OWNER_GREEN;
-    else if (IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_HOSTBOT2) == BST_CHECKED)
-        t2 = OWNER_HOSTBOT;
-	else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL2) == BST_CHECKED)
-		t2 = OWNER_NEUTRAL;
-	else
-		return;
-
-	if(f)
+	// Create a lambda function to simplify retrieving the selected tribe from each drop-down.
+	const auto get_selected_tribe_from_drop_down = [hWnd](const int dialog_item_index) -> int
 	{
-		if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE3) == BST_CHECKED)
-			t3 = OWNER_BLUE;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED3) == BST_CHECKED)
-			t3 = OWNER_RED;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW3) == BST_CHECKED)
-			t3 = OWNER_YELLOW;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN3) == BST_CHECKED)
-			t3 = OWNER_GREEN;
-        else if (IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_HOSTBOT3) == BST_CHECKED)
-            t2 = OWNER_HOSTBOT;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL3) == BST_CHECKED)
-			t3 = OWNER_NEUTRAL;
-		else
-			f = false;
+		// RETRIEVE THE DROP-DOWN BOX.
+		HWND hItem = GetDlgItem(hWnd, dialog_item_index);
+		const bool item_handle_valid = (NULL != hItem);
+		if (!item_handle_valid)
+		{
+			// The tribe cannot be retrieved since the drop-down is invalid.
+			return CB_ERR;
+		}
 
-		if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_BLUE4) == BST_CHECKED)
-			t4 = OWNER_BLUE;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_RED4) == BST_CHECKED)
-			t4 = OWNER_RED;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_YELLOW4) == BST_CHECKED)
-			t4 = OWNER_YELLOW;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_GREEN4) == BST_CHECKED)
-			t4 = OWNER_GREEN;
-        else if (IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_HOSTBOT4) == BST_CHECKED)
-            t2 = OWNER_HOSTBOT;
-		else if(IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_NEUTRAL4) == BST_CHECKED)
-			t4 = OWNER_NEUTRAL;
-		else
-			f = false;
+		// RETRIEVE THE TRIBE FROM THE DROP-DOWN VALUE.
+		const auto drop_down_value = SendMessage(hItem, CB_GETCURSEL, 0, 0);
+		switch (drop_down_value)
+		{
+		case BLUE_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_BLUE;
+		case RED_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_RED;
+		case YELLOW_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_YELLOW;
+		case GREEN_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_GREEN;
+		case CYAN_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_CYAN;
+		case MAGENTA_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_MAGENTA;
+		case BLACK_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_BLACK;
+		case ORANGE_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_ORANGE;
+		case NEUTRAL_TRIBE_SWAP_DROP_DOWN_INDEX:
+			return OWNER_NEUTRAL;
+		default:
+			return CB_ERR;
+		}
+	};
+
+	// DETERMINE WHICH TRIBES WILL BE SWAPPED FOR THE FIRST SWAP.
+	int t1 = get_selected_tribe_from_drop_down(IDC_FIRST_SWAP_TRIBE_SOURCE_DROP_DOWN);
+	int t2 = get_selected_tribe_from_drop_down(IDC_FIRST_SWAP_TRIBE_DESTINATION_DROP_DOWN);
+	const bool first_swap_valid = (
+		(CB_ERR != t1) &&
+		(CB_ERR != t2));
+	if (!first_swap_valid)
+	{
+		// No tribe swap can take place since the first swap had invalid selections.
+		return;
+	}
+
+	// CHECK TO SEE IF TWO SWAPS ARE ENABLED.
+	int t3, t4;
+	bool perform_two_swaps = IsDlgButtonChecked(hWnd, IDC_SWAPTRIBE_SWAP2) == BST_CHECKED;
+	if(perform_two_swaps)
+	{
+		// DETERMINE WHICH TRIBES WILL BE SWAPPED FOR THE SECOND SWAP.
+		t3 = get_selected_tribe_from_drop_down(IDC_SECOND_SWAP_TRIBE_SOURCE_DROP_DOWN);
+		t4 = get_selected_tribe_from_drop_down(IDC_SECOND_SWAP_TRIBE_DESTINATION_DROP_DOWN);
+		const bool second_swap_valid = (
+			(CB_ERR != t3) &&
+			(CB_ERR != t4));
+		if (!second_swap_valid)
+		{
+			// The second swap will not be performed since one or more of its selections were invalid.
+			perform_two_swaps = false;
+		}
 	}
 
 	if (net.IsInitialized())
@@ -8925,11 +8639,12 @@ void DlgSwapTribeSwap(HWND hWnd)
 		p->wData[1] = t2;
 		p->wData[2] = t3;
 		p->wData[3] = t4;
-		p->wData[4] = f;
+		p->wData[4] = perform_two_swaps;
 		net.SendPacket(p);
 		p->del();
 	}
 
+	// PERFORM THE TRIBE SWAP.
 	THING *t = Things;
 	do
 	{
@@ -8937,7 +8652,7 @@ void DlgSwapTribeSwap(HWND hWnd)
 		{
 			if(t1 == t->Thing.Owner)
 				t->Thing.Owner = t2;
-			else if(f && t3 == t->Thing.Owner)
+			else if(perform_two_swaps && t3 == t->Thing.Owner)
 				t->Thing.Owner = t4;
 		}
 
@@ -8953,39 +8668,54 @@ void DlgSwapTribeSwap(HWND hWnd)
 
 int __stdcall DlgSwapTribeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	// Create a lambda function for populating the drop-down box used for swapping tribes.
+	// This makes it simpler to initialize the drop-down box.
+	const auto populate_tribe_swap_drop_down = [hWnd](const int dialog_item_index)
+	{
+		// RETRIEVE THE DROP-DOWN BOX.
+		HWND hItem = GetDlgItem(hWnd, dialog_item_index);
+		const bool item_handle_valid = (NULL != hItem);
+		if (!item_handle_valid)
+		{
+			// The drop-down cannot be populated since it is not valid.
+			return;
+		}
+
+		// POPULATE THE DROP-DOWN.
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_BLUE);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_RED);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_YELLOW);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_GREEN);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_CYAN);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_MAGENTA);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_BLACK);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_ORANGE);
+		SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OWNER_NEUTRAL);
+
+		// SELECT THE BLUE TRIBE, BY DEFAULT.
+		SendMessage(hItem, CB_SETCURSEL, BLUE_TRIBE_SWAP_DROP_DOWN_INDEX, 0);
+	};
+
 	switch(uMsg)
 	{
 	case WM_INITDIALOG:
+		// POPULATE THE DROP-DOWNS FOR SWAPPING TRIBES.
+		populate_tribe_swap_drop_down(IDC_FIRST_SWAP_TRIBE_SOURCE_DROP_DOWN);
+		populate_tribe_swap_drop_down(IDC_FIRST_SWAP_TRIBE_DESTINATION_DROP_DOWN);
+		populate_tribe_swap_drop_down(IDC_SECOND_SWAP_TRIBE_SOURCE_DROP_DOWN);
+		populate_tribe_swap_drop_down(IDC_SECOND_SWAP_TRIBE_DESTINATION_DROP_DOWN);
+
+		// CHECK THE BOX FOR PERMITTING TWO SWAPS TO TAKE PLACE BY DEFAULT.
 		CheckDlgButton(hWnd, IDC_SWAPTRIBE_SWAP2, BST_CHECKED);
 		return 0;
 
 	case WM_COMMAND:
-		switch(wParam)
+		switch (wParam)
 		{
-		case IDC_SWAPTRIBE_BLUE1:
-		case IDC_SWAPTRIBE_RED1:
-		case IDC_SWAPTRIBE_YELLOW1:
-		case IDC_SWAPTRIBE_GREEN1:
-		case IDC_SWAPTRIBE_NEUTRAL1:
-		case IDC_SWAPTRIBE_BLUE2:
-		case IDC_SWAPTRIBE_RED2:
-		case IDC_SWAPTRIBE_YELLOW2:
-		case IDC_SWAPTRIBE_GREEN2:
-		case IDC_SWAPTRIBE_NEUTRAL2:
-        case IDC_SWAPTRIBE_HOSTBOT1:
-        case IDC_SWAPTRIBE_HOSTBOT2:
-        case IDC_SWAPTRIBE_HOSTBOT3:
-        case IDC_SWAPTRIBE_HOSTBOT4:
-		case IDC_SWAPTRIBE_BLUE3:
-		case IDC_SWAPTRIBE_RED3:
-		case IDC_SWAPTRIBE_YELLOW3:
-		case IDC_SWAPTRIBE_GREEN3:
-		case IDC_SWAPTRIBE_NEUTRAL3:
-		case IDC_SWAPTRIBE_BLUE4:
-		case IDC_SWAPTRIBE_RED4:
-		case IDC_SWAPTRIBE_YELLOW4:
-		case IDC_SWAPTRIBE_GREEN4:
-		case IDC_SWAPTRIBE_NEUTRAL4:
+		case IDC_FIRST_SWAP_TRIBE_SOURCE_DROP_DOWN:
+		case IDC_FIRST_SWAP_TRIBE_DESTINATION_DROP_DOWN:
+		case IDC_SECOND_SWAP_TRIBE_SOURCE_DROP_DOWN:
+		case IDC_SECOND_SWAP_TRIBE_DESTINATION_DROP_DOWN:
 		case IDC_SWAPTRIBE_SWAP2:
 			DlgSwapTribeUpdate(hWnd);
 			break;
@@ -8995,7 +8725,6 @@ int __stdcall DlgSwapTribeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 		}
 
 		return 0;
-
 
 	case WM_CLOSE:
 		DlgSwapTribeToggle();
