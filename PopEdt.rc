@@ -452,13 +452,15 @@ BEGIN
     COMBOBOX        IDC_MAP_TYPE,7,83,80,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 END
 
-IDD_INFO DIALOGEX 0, 0, 157, 208
+IDD_INFO DIALOGEX 0, 0, 157, 239
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Map Info"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     GROUPBOX        "",IDC_STATIC,7,7,143,50
+    LTEXT           "Level Name:",IDC_STATIC,13,15,40,8
+    LTEXT           "-",IDC_INFO_LEVEL_NAME,57,15,87,8
     LTEXT           "File Name:",IDC_STATIC,13,27,43,8
     EDITTEXT        IDC_INFO_FILENAME,55,27,87,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER | NOT WS_TABSTOP
     LTEXT           "Path:",IDC_STATIC,13,39,43,8
@@ -468,7 +470,7 @@ BEGIN
     LTEXT           "-",IDC_INFO_OBJ_COUNT,65,68,70,8
     LTEXT           "Trees:",IDC_STATIC,13,76,43,8
     LTEXT           "-",IDC_INFO_TREE_COUNT,65,76,70,8
-    LTEXT           "Wildmans:",IDC_STATIC,13,84,43,8
+    LTEXT           "Wildmen:",IDC_STATIC,13,84,43,8
     LTEXT           "-",IDC_INFO_WILDMAN_COUNT,65,84,70,8
     LTEXT           "StoneHeads:",IDC_STATIC,13,92,43,8
     LTEXT           "-",IDC_INFO_STONEHEAD_COUNT,65,92,70,8
@@ -480,26 +482,36 @@ BEGIN
     LTEXT           "-",IDC_INFO_TRIGGER_COUNT,65,116,70,8
     LTEXT           "Decorations:",IDC_STATIC,13,124,43,8
     LTEXT           "-",IDC_INFO_DECORATIONS_COUNT,65,124,70,8
-    GROUPBOX        "",IDC_STATIC,7,139,143,62
-    LTEXT           "Population",IDC_STATIC,46,147,40,8
-    LTEXT           "Buildings",IDC_STATIC,92,147,40,8
-    LTEXT           "Blue:",IDC_STATIC,13,155,29,8
-    CTEXT           "-",IDC_INFO_POP_BLUE,46,155,30,8
-    CTEXT           "-",IDC_INFO_BLG_BLUE,92,155,30,8
-    LTEXT           "Red:",IDC_STATIC,13,163,29,8
-    CTEXT           "-",IDC_INFO_POP_RED,46,163,30,8
-    CTEXT           "-",IDC_INFO_BLG_RED,92,163,30,8
-    LTEXT           "Yellow:",IDC_STATIC,13,171,29,8
-    CTEXT           "-",IDC_INFO_POP_YELLOW,46,171,30,8
-    CTEXT           "-",IDC_INFO_BLG_YELLOW,92,171,30,8
-    LTEXT           "Green:",IDC_STATIC,13,179,29,8
-    CTEXT           "-",IDC_INFO_POP_GREEN,46,179,30,8
-    CTEXT           "-",IDC_INFO_BLG_GREEN,92,179,30,8
-    LTEXT           "Neutral:",IDC_STATIC,13,187,29,8
-    CTEXT           "-",IDC_INFO_POP_NEUTRAL,46,187,30,8
-    CTEXT           "-",IDC_INFO_BLG_NEUTRAL,92,187,30,8
-    LTEXT           "Level Name:",IDC_STATIC,13,15,40,8
-    LTEXT           "-",IDC_INFO_LEVEL_NAME,57,15,87,8
+    GROUPBOX        "",IDC_STATIC,7,141,143,91
+    LTEXT           "Population",IDC_STATIC,46,148,40,8
+    LTEXT           "Buildings",IDC_STATIC,92,148,40,8
+    LTEXT           "Blue:",IDC_STATIC,13,156,29,8
+    CTEXT           "-",IDC_INFO_POP_BLUE,46,156,30,8
+    CTEXT           "-",IDC_INFO_BLG_BLUE,92,156,30,8
+    LTEXT           "Red:",IDC_STATIC,13,164,29,8
+    CTEXT           "-",IDC_INFO_POP_RED,46,164,30,8
+    CTEXT           "-",IDC_INFO_BLG_RED,92,164,30,8
+    LTEXT           "Yellow:",IDC_STATIC,13,172,29,8
+    CTEXT           "-",IDC_INFO_POP_YELLOW,46,172,30,8
+    CTEXT           "-",IDC_INFO_BLG_YELLOW,92,172,30,8
+    LTEXT           "Green:",IDC_STATIC,13,180,29,8
+    CTEXT           "-",IDC_INFO_POP_GREEN,46,180,30,8
+    CTEXT           "-",IDC_INFO_BLG_GREEN,92,180,30,8
+    LTEXT           "Cyan:",IDC_STATIC,13,188,29,8
+    CTEXT           "-",IDC_INFO_POP_CYAN,46,188,30,8
+    CTEXT           "-",IDC_INFO_BLG_CYAN,92,188,30,8
+    LTEXT           "Magenta:",IDC_STATIC,13,196,29,8
+    CTEXT           "-",IDC_INFO_POP_MAGENTA,46,196,30,8
+    CTEXT           "-",IDC_INFO_BLG_MAGENTA,92,196,30,8
+    LTEXT           "Black:",IDC_STATIC,13,204,29,8
+    CTEXT           "-",IDC_INFO_POP_BLACK,46,204,30,8
+    CTEXT           "-",IDC_INFO_BLG_BLACK,92,204,30,8
+    LTEXT           "Orange:",IDC_STATIC,13,212,29,8
+    CTEXT           "-",IDC_INFO_POP_ORANGE,46,212,30,8
+    CTEXT           "-",IDC_INFO_BLG_ORANGE,92,212,30,8
+    LTEXT           "Neutral:",IDC_STATIC,13,220,29,8
+    CTEXT           "-",IDC_INFO_POP_NEUTRAL,46,220,30,8
+    CTEXT           "-",IDC_INFO_BLG_NEUTRAL,92,220,30,8
 END
 
 IDD_SWAP_TRIBE DIALOGEX 0, 0, 245, 88
@@ -785,7 +797,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 150
         TOPMARGIN, 7
-        BOTTOMMARGIN, 201
+        BOTTOMMARGIN, 232
     END
 
     IDD_SWAP_TRIBE, DIALOG

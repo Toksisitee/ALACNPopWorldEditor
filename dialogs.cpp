@@ -8397,23 +8397,31 @@ void DlgInfoUpdate(HWND hWnd)
 	sprintf(str, "%d", ObjectsCount);
 	SetDlgItemText(hWnd, IDC_INFO_OBJ_COUNT, str);
 
-	int Tree = 0,
-		Wildman = 0,
-		StoneHead = 0,
-		Knowledge = 0,
-		Triggers = 0,
-		Discovery = 0,
-		PopBlue = 0,
-		PopRed = 0,
-		PopYellow = 0,
-		PopGreen = 0,
-		PopNeutral = 0,
-		BlgBlue = 0,
-		BlgRed = 0,
-		BlgYellow = 0,
-		BlgGreen = 0,
-		BlgNeutral = 0,
-		Decorations = 0;
+	int Tree = 0;
+	int Wildman = 0;
+	int StoneHead = 0;
+	int Knowledge = 0;
+	int Triggers = 0;
+	int Discovery = 0;
+	int PopBlue = 0;
+	int PopRed = 0;
+	int PopYellow = 0;
+	int PopGreen = 0;
+	int PopCyan = 0;
+	int PopMagenta = 0;
+	int PopBlack = 0;
+	int PopOrange = 0;
+	int PopNeutral = 0;
+	int BlgBlue = 0;
+	int BlgRed = 0;
+	int BlgYellow = 0;
+	int BlgGreen = 0;
+	int BlgCyan = 0;
+	int BlgMagenta = 0;
+	int BlgBlack = 0;
+	int BlgOrange = 0;
+	int BlgNeutral = 0;
+	int Decorations = 0;
 
 	if(Things)
 	{
@@ -8426,10 +8434,14 @@ void DlgInfoUpdate(HWND hWnd)
 
 				switch(t->Thing.Owner)
 				{
-				case OWNER_BLUE:   PopBlue++;   break;
-				case OWNER_RED:    PopRed++;    break;
-				case OWNER_YELLOW: PopYellow++; break;
-				case OWNER_GREEN:  PopGreen++;  break;
+				case OWNER_BLUE:	PopBlue++;		break;
+				case OWNER_RED:		PopRed++;		break;
+				case OWNER_YELLOW:	PopYellow++;	break;
+				case OWNER_GREEN:	PopGreen++;		break;
+				case OWNER_CYAN:	PopCyan++;		break;
+				case OWNER_MAGENTA:	PopMagenta++;	break;
+				case OWNER_BLACK:	PopBlack++;		break;
+				case OWNER_ORANGE:	PopOrange++;	break;
 				default: PopNeutral++;
 				}
 			}
@@ -8439,10 +8451,14 @@ void DlgInfoUpdate(HWND hWnd)
 
 				switch(t->Thing.Owner)
 				{
-				case OWNER_BLUE:   BlgBlue++;   break;
-				case OWNER_RED:    BlgRed++;    break;
-				case OWNER_YELLOW: BlgYellow++; break;
-				case OWNER_GREEN:  BlgGreen++;  break;
+				case OWNER_BLUE:    BlgBlue++;		break;
+				case OWNER_RED:     BlgRed++;		break;
+				case OWNER_YELLOW:  BlgYellow++;	break;
+				case OWNER_GREEN:   BlgGreen++;		break;
+				case OWNER_CYAN:	BlgCyan++;		break;
+				case OWNER_MAGENTA:	BlgMagenta++;	break;
+				case OWNER_BLACK:	BlgBlack++;		break;
+				case OWNER_ORANGE:	BlgOrange++;	break;
 				default: BlgNeutral++;
 				}
 			}
@@ -8488,6 +8504,14 @@ void DlgInfoUpdate(HWND hWnd)
 	SetDlgItemText(hWnd, IDC_INFO_POP_YELLOW, str);
 	sprintf(str, "%d", PopGreen);
 	SetDlgItemText(hWnd, IDC_INFO_POP_GREEN, str);
+	sprintf(str, "%d", PopCyan);
+	SetDlgItemText(hWnd, IDC_INFO_POP_CYAN, str);
+	sprintf(str, "%d", PopMagenta);
+	SetDlgItemText(hWnd, IDC_INFO_POP_MAGENTA, str);
+	sprintf(str, "%d", PopBlack);
+	SetDlgItemText(hWnd, IDC_INFO_POP_BLACK, str);
+	sprintf(str, "%d", PopOrange);
+	SetDlgItemText(hWnd, IDC_INFO_POP_ORANGE, str);
 	sprintf(str, "%d", PopNeutral);
 	SetDlgItemText(hWnd, IDC_INFO_POP_NEUTRAL, str);
 
@@ -8499,6 +8523,14 @@ void DlgInfoUpdate(HWND hWnd)
 	SetDlgItemText(hWnd, IDC_INFO_BLG_YELLOW, str);
 	sprintf(str, "%d", BlgGreen);
 	SetDlgItemText(hWnd, IDC_INFO_BLG_GREEN, str);
+	sprintf(str, "%d", BlgCyan);
+	SetDlgItemText(hWnd, IDC_INFO_BLG_CYAN, str);
+	sprintf(str, "%d", BlgMagenta);
+	SetDlgItemText(hWnd, IDC_INFO_BLG_MAGENTA, str);
+	sprintf(str, "%d", BlgBlack);
+	SetDlgItemText(hWnd, IDC_INFO_BLG_BLACK, str);
+	sprintf(str, "%d", BlgOrange);
+	SetDlgItemText(hWnd, IDC_INFO_BLG_ORANGE, str);
 	sprintf(str, "%d", BlgNeutral);
 	SetDlgItemText(hWnd, IDC_INFO_BLG_NEUTRAL, str);
 }
