@@ -2843,6 +2843,7 @@ void SetEditLand()
 		fEngineEditMarkers = false;
 		if(hDlgObject) DlgObjectToggle();
 		if(hDlgMarkers) DlgMarkersToggle();
+		if (!hDlgBrush) DlgBrushToggle();
 	}
 }
 
