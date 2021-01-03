@@ -4354,6 +4354,96 @@ up_skip:
 		bKeys[0x43] = 0;
 	}
 
+	// ctrl + x (cut land and add to preset)
+	if (bKeys[VK_CONTROL] && bKeys[0x58])
+	{
+		if (GroundEditBrushSize)
+		{
+			D3DVECTOR r0, r1;
+			EngineGetPick(&r0, &r1);
+
+			WORD h;
+			int sx, sz, i = 0;
+			float ex, ez;
+			EngineGetIntersectMapSquare(r0, r1, &sx, &sz, &ex, &ez);
+
+			int ax, az, tx, tz;
+			auto x = (int)ex - (GroundEditBrushSize / 2);
+			auto z = (int)ez - (GroundEditBrushSize / 2);
+			tx = x;
+			tz = z;
+
+			while (x < 0) x += GROUND_X_SIZE;
+			while (z < 0) z += GROUND_Z_SIZE;
+			while (x >= GROUND_X_SIZE) x -= GROUND_X_SIZE;
+			while (z >= GROUND_Z_SIZE) z -= GROUND_Z_SIZE;
+
+			Preset.Land.clear();
+			Preset.LandSize = GroundEditBrushSize;
+			Preset.Rotation = 0;
+			std::vector<THING*> remove_list;
+			GroundBuffer lbuff;
+			memcpy(lbuff.EngineGround, wEngineGround, sizeof(lbuff.EngineGround));
+			vecEngineGroundUndo.push_back(lbuff);
+
+			az = 0;
+			while (az <= GroundEditBrushSize)
+			{
+				ax = 0;
+				while (ax <= GroundEditBrushSize)
+				{
+					h = EngineGetGroundHeight(x + ax, z + az);
+					EngineSetGroundHeight(x + ax, z + az, 0);
+
+					//if (h)
+					Preset.Land.push_back({ x + ax, z + az, h, {0} });
+					
+					if (fCopyObjects)
+					{
+						THING *thing = Things;
+						if (thing) do
+						{
+							if ((int)thing->ex == (int)(ax + tx) && (int)thing->ez == (int)(az + tz)) {
+								Preset.Land[i].t = *thing;
+								remove_list.push_back(thing);
+							}
+
+							thing = thing->Next;
+						} while (thing != Things);
+					}
+
+					ax++;
+					i++;
+				}
+				az++;
+			}
+
+			if (remove_list.size())
+			{
+				SaveThingsUndoState();
+				for (const auto& t : remove_list)
+				{
+					if (net.IsInitialized())
+					{
+						struct Packet *p = new Packet;
+						p->wType = PACKETTYPE_DELETE_OBJECT;
+						p->wData[0] = t->Idx;
+						net.SendPacket(p);
+						p->del();
+					}
+
+					ThingsIndices[t->Idx] = 0;
+					UNLINK(Things, t);
+					DlgObjectUnlinkObj(t);
+					delete t;
+					ObjectsCount--;
+				}
+			}
+			bLandPresetMode = true;
+		}
+		bKeys[0x58] = 0;
+	}
+
 	// ctrl + v (paste land as preset)
 	if (bKeys[VK_CONTROL] && bKeys[0x56])
 	{
