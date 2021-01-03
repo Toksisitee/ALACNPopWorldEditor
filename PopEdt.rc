@@ -409,7 +409,7 @@ END
 IDD_SCRIPT2 DIALOGEX 0, 0, 220, 150
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
-CAPTION "Script2"
+CAPTION "Lua Script"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     LTEXT           "&Script 1:",IDC_SCRIPT2_TXT_1,7,7,38,8
@@ -594,7 +594,7 @@ END
 IDD_AI_SCRIPT DIALOGEX 0, 0, 166, 88
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
-CAPTION "AI Script"
+CAPTION "PopScript (Legacy)"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "Compile",IDC_AI_COMPILE,"Button",BS_AUTORADIOBUTTON,25,7,50,10
@@ -880,14 +880,14 @@ BEGIN
         POPUP "Header"
         BEGIN
             MENUITEM "Available Spells/Buildings",  ID_HEADER_AVAILABLE_SPELLS_BUILDINGS
-            MENUITEM "Script2",                     ID_HEADER_SCRIPT2
+            MENUITEM "Lua Script",					ID_HEADER_SCRIPT2
             MENUITEM "Spells not charging",         ID_HEADER_SPELLSNOTCHARGING
             MENUITEM "Allies",                      ID_HEADER_ALLIES
             MENUITEM "General",                     ID_HEADER_GENERAL
             MENUITEM "Object Bank",                 ID_HEADER_OBJECTBANK
             MENUITEM "Map Texture",                 ID_HEADER_MAPTEXTURE
         END
-        POPUP "AI Script"
+        POPUP "PopScript (Legacy)"
         BEGIN
             MENUITEM "Attributes",                  ID_AISCRIPT_ATTRIBUTES
             MENUITEM "Script",                      ID_AISCRIPT_SCRIPT
