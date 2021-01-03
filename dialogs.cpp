@@ -1993,6 +1993,7 @@ void GetThingName(THING *t, char *str)
 		case M_EFFECT_ATLANTIS_INVOKE:         strcat(str, SZ_EFFECT_ATLANTIS_INVOKE);         break;
 		case M_EFFECT_STATUE_TO_AOD:           strcat(str, SZ_EFFECT_STATUE_TO_AOD);           break;
 		case M_EFFECT_FILL_ONE_SHOTS:          strcat(str, SZ_EFFECT_FILL_ONE_SHOTS);          break;
+#if _ASCENSION
 		case M_EFFECT_RESURRECT:			   strcat(str, SZ_EFFECT_RESURRECT);			   break;
         case M_EFFECT_BIG_SMOKE:			   strcat(str, SZ_EFFECT_BIG_SMOKE);			   break;
 		case M_EFFECT_FIRESTORM_BALL:		   strcat(str, SZ_EFFECT_FIRESTORM_BALL);		   break;
@@ -2017,7 +2018,7 @@ void GetThingName(THING *t, char *str)
 		case M_EFFECT_SKULL_THING:			   strcat(str, SZ_EFFECT_SKULL_THING);			   break;
 		case M_EFFECT_SKULL_THING_FIRE:		   strcat(str, SZ_EFFECT_SKULL_THING_FIRE);		   break;
 		case M_EFFECT_GHOST_SKULL:			   strcat(str, SZ_EFFECT_GHOST_SKULL);			   break;
-
+#endif
 		default: strcat(str, SZ_UNKNOW);
 		}
 		break;
@@ -3799,6 +3800,7 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					case IDX_M_EFFECT_ATLANTIS_INVOKE:         ThingSelected->Thing.Model = M_EFFECT_ATLANTIS_INVOKE;         break;
 					case IDX_M_EFFECT_STATUE_TO_AOD:           ThingSelected->Thing.Model = M_EFFECT_STATUE_TO_AOD;           break;
 					case IDX_M_EFFECT_FILL_ONE_SHOTS:          ThingSelected->Thing.Model = M_EFFECT_FILL_ONE_SHOTS;          break;
+#if _ASCENSION
 					case IDX_M_EFFECT_RESURRECT:				ThingSelected->Thing.Model = M_EFFECT_RESURRECT;			  break;
 					case IDX_M_EFFECT_BIG_SMOKE:				ThingSelected->Thing.Model = M_EFFECT_BIG_SMOKE;			  break;
 					case IDX_M_EFFECT_FIRESTORM_BALL:			ThingSelected->Thing.Model = M_EFFECT_FIRESTORM_BALL;         break;
@@ -3811,7 +3813,6 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					case IDX_M_EFFECT_LAVA_FLOW_NEW_WHITE_DEEP: ThingSelected->Thing.Model = M_EFFECT_LAVA_FLOW_NEW_WHITE_DEEP;				break;
 					case IDX_M_EFFECT_LAVA_FIXED: ThingSelected->Thing.Model = M_EFFECT_LAVA_FIXED;				break;
 					case IDX_M_EFFECT_SOUL: ThingSelected->Thing.Model = M_EFFECT_SOUL;				break;
-
 					case IDX_M_EFFECT_NEW_PLANT1: ThingSelected->Thing.Model = M_EFFECT_NEW_PLANT1;				break;
 					case IDX_M_EFFECT_NEW_PLANT2: ThingSelected->Thing.Model = M_EFFECT_NEW_PLANT2;				break;
 					case IDX_M_EFFECT_NEW_PLANT3: ThingSelected->Thing.Model = M_EFFECT_NEW_PLANT3;				break;
@@ -3824,7 +3825,7 @@ int __stdcall DlgObjectProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					case IDX_M_EFFECT_SKULL_THING: ThingSelected->Thing.Model = M_EFFECT_SKULL_THING;				break;
 					case IDX_M_EFFECT_SKULL_THING_FIRE: ThingSelected->Thing.Model = M_EFFECT_SKULL_THING_FIRE;				break;
 					case IDX_M_EFFECT_GHOST_SKULL: ThingSelected->Thing.Model = M_EFFECT_GHOST_SKULL;				break;
-
+#endif
 					case IDX_M_EFFECT_LAND_BRIDGE:
 						ThingSelected->Thing.Model = M_EFFECT_LAND_BRIDGE;
 						ThingSelected->Thing.Bluff[0] = ThingSelected->Thing.PosX;
@@ -4290,6 +4291,7 @@ void DlgObjectUpdateInfo(HWND hWnd, bool lock)
 			case M_EFFECT_ATLANTIS_INVOKE:         SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_ATLANTIS_INVOKE, 0);         break;
 			case M_EFFECT_STATUE_TO_AOD:           SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_STATUE_TO_AOD, 0);           break;
 			case M_EFFECT_FILL_ONE_SHOTS:          SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_FILL_ONE_SHOTS, 0);          break;
+#if _ASCENSION
 			case M_EFFECT_RESURRECT:              SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_RESURRECT, 0);              break;
 			case M_EFFECT_BIG_SMOKE:              SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_BIG_SMOKE, 0);              break;
 			case M_EFFECT_FIRESTORM_BALL:               SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_FIRESTORM_BALL, 0);               break;
@@ -4314,7 +4316,7 @@ void DlgObjectUpdateInfo(HWND hWnd, bool lock)
 			case M_EFFECT_SKULL_THING:          SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_SKULL_THING, 0);          break;
 			case M_EFFECT_SKULL_THING_FIRE:          SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_SKULL_THING_FIRE, 0);          break;
 			case M_EFFECT_GHOST_SKULL:          SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_GHOST_SKULL, 0);          break;
-
+#endif
 			case M_EFFECT_LAND_BRIDGE:
 				{
 					SendMessage(hItem, CB_SETCURSEL, IDX_M_EFFECT_LAND_BRIDGE, 0);
@@ -4665,6 +4667,7 @@ void DlgObjectSetEffectList(HWND hWnd)
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_ATLANTIS_INVOKE);
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_STATUE_TO_AOD);
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_FILL_ONE_SHOTS);
+#if _ASCENSION
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_RESURRECT);
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_BIG_SMOKE);
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_FIRESTORM_BALL);
@@ -4689,6 +4692,7 @@ void DlgObjectSetEffectList(HWND hWnd)
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_SKULL_THING);
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_SKULL_THING_FIRE);
 	SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_EFFECT_GHOST_SKULL);
+#endif
 }
 
 
