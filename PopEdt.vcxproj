@@ -168,6 +168,9 @@
   <ItemGroup>
     <Manifest Include="PopEdt.exe.manifest" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="changelog.TXT" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

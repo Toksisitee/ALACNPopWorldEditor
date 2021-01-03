@@ -1,3 +1,18 @@
+Version 1.8.0
+Date: Jan 3 2020
+Authors: Toksisitee & WhitePhantom
+
+* Swap Tribe window received an overhaul and now supports all 8 tribes. (WhitePhantom)
+* Cyan, Magenta, Black and Orange tribes were added to the Info window. (WhitePhantom)
+* Cleaned up the arrangement of the Level Info window (WhitePhantom)
+* CTRL + X command for cutting land pieces as presets.
+* After opening the Brush window or entering Landscape Edit mode, you may use the arrow keys to move around.
+* When entering Landscape Edit mode, the Brush window will automatically open.
+* Renamed "AI Script" to "PopScript (Legacy)".
+* Renamed "Script2" to "Lua Script".
+* Updated About Window.
+
+
 Version: 1.7.0
 Date: Dec 3 2020
 Author: Toksisitee
