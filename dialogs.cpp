@@ -2844,6 +2844,7 @@ void SetEditLand()
 		if(hDlgObject) DlgObjectToggle();
 		if(hDlgMarkers) DlgMarkersToggle();
 		if (!hDlgBrush) DlgBrushToggle();
+		if (hMainWnd) SetFocus(hMainWnd);
 	}
 }
 
