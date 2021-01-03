@@ -277,20 +277,21 @@ END
 IDD_ABOUT DIALOGEX 0, 0, 170, 176
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_TOOLWINDOW
-CAPTION "Populous World Editor (Toksisitee)"
+CAPTION "Populous World Editor"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     ICON            IDI_CN,IDC_STATIC,142,7,21,20
     LTEXT           "This build is maintained by Toksisitee.",IDC_STATIC,7,7,140,8
-    LTEXT           "- Authors -",IDC_STATIC,7,37,88,8
-    LTEXT           "ALACN: original author",IDC_STATIC,7,47,88,8
-    LTEXT           "alacn@bol.com.br",IDC_STATIC,17,55,88,8
-    LTEXT           "uhahaa@msn.com",IDC_STATIC,17,65,88,8
-    LTEXT           "http://alacn1.com/populous/",IDC_ABOUT_LINK,17,75,135,8
-    LTEXT           "Toksisitee: updates (fixes and new features)",IDC_STATIC,7,97,150,8
-    LTEXT           "github.com/Toksisitee",IDC_STATIC,17,105,88,8
-    LTEXT           "Version: ---",IDC_ABOUT_VERSION,7,139,135,8
-    LTEXT           "Date: ---",IDC_ABOUT_DATE,8,149,135,8
+
+    LTEXT           "Original Author",IDC_STATIC,7,33,88,8
+    LTEXT           "ALACN - alacn@bol.com.br uhahaa@msn.com",IDC_STATIC,7,43,188,8
+
+	LTEXT           "Contributors", IDC_STATIC, 7, 65, 88, 8
+    LTEXT           "Toksisitee - github.com/Toksisitee",IDC_STATIC,7,75,150,8
+	LTEXT           "WhitePhantom - github.com/WhitePhantom88", IDC_STATIC, 7, 85, 150, 8
+
+    LTEXT           "Version: ---",IDC_ABOUT_VERSION,7,129,135,8
+    LTEXT           "Date: ---",IDC_ABOUT_DATE,8,139,135,8
     DEFPUSHBUTTON   "OK",IDOK,49,160,50,14
 END
 
