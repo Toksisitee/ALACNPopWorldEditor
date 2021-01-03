@@ -2902,6 +2902,7 @@ void DlgBrushToggle()
 	{
 		hDlgBrush = CreateDialogParam(hInst, MAKEINTRESOURCE(IDD_BRUSH), hMainWnd, DlgBrushProc, 0);
 		ShowWindow(hDlgBrush, SW_SHOW);
+		if (hMainWnd) SetFocus(hMainWnd);
 	}
 }
 
