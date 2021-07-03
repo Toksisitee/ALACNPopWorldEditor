@@ -4,9 +4,6 @@
 //
 #define BUILD_INCREMENT                 0
 #define RC_MANIFEST                     1
-#define MAJOR_VERSION                   1
-#define REVISION_NUMBER                 1
-#define MINOR_VERSION                   2
 #define IDI_CN                          101
 #define IDR_ACCELERATOR                 102
 #define IDD_MENUBAR_TOOLBAR             150

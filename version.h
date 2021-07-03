@@ -22,7 +22,7 @@
                                     "," STRINGIZE(ENGINE_REVISION_NUMBER) \
                                     "," STRINGIZE(ENGINE_BUILD_NUMBER) \
 
-#define POPEDT_VERSION			STRINGIZE(MAJOR_VERSION) \
+#define POPEDT_VERSION			STRINGIZE(ENGINE_MAJOR_VERSION) \
                                     "." STRINGIZE(ENGINE_MINOR_VERSION) \
                                     "." STRINGIZE(ENGINE_REVISION_NUMBER) \
                                     "." STRINGIZE(ENGINE_BUILD_NUMBER)
