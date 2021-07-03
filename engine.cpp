@@ -128,6 +128,7 @@ D3DLIGHT7				lightLandscape,
 int						GroundEditBrushSize		= 3,
 						PreviousBrushSize		= 3,
 						GroundEditBrushSpeed	= 4,
+						GroundEditMaxAlt		= -1,
 						ObjectsCount			= 0,
 						LevelFormatMode			= LEVEL_FORMAT_MODE_V3;
 
@@ -4182,6 +4183,9 @@ void EngineSetGroundHeightPreset(int x, int z, WORD h)
 
 void EngineSetGroundHeight(int x, int z, WORD h)
 {
+	if (GroundEditMaxAlt != -1 && h > GroundEditMaxAlt)
+		return;
+
 	while(x < 0) x += GROUND_X_SIZE;
 	while(z < 0) z += GROUND_Z_SIZE;
 	while(x >= GROUND_X_SIZE) x -= GROUND_X_SIZE;

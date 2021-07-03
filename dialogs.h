@@ -476,6 +476,9 @@ http://alacn.dnsalias.org:8080/
 #define BRUSH_SPEED_MIN								0
 #define BRUSH_SPEED_MAX								8
 
+#define SZ_BRUSH_MAX_ALT_TXT						"Max. Alt: %i"
+#define BRUSH_MAX_ALT_MIN							-1
+#define BRUSH_MAX_ALT_MAX							1024
 
 #define DLG_DEVICE_CONFIRM_TIMERID					1
 

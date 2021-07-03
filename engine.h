@@ -323,6 +323,7 @@ extern float					fEnginePosX,
 extern int						GroundEditBrushSize,
 								PreviousBrushSize,
 								GroundEditBrushSpeed,
+								GroundEditMaxAlt,
 								ObjectsCount,
 								LevelFormatMode;
 extern TEXTURE					*Textures;

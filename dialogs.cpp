@@ -2920,6 +2920,10 @@ void DlgBrushUpdate(HWND hWnd)
 	SendMessage(GetDlgItem(hWnd, IDC_BRUSH_SPEED), TBM_SETPOS, true, GroundEditBrushSpeed);
 	sprintf(str, SZ_BRUSH_SPEED_TXT, GroundEditBrushSpeed);
 	SetDlgItemText(hWnd, IDC_BRUSH_SPEED_TXT, str);
+
+	SendMessage(GetDlgItem(hWnd, IDC_BRUSH_MAX_ALT), TBM_SETPOS, true, GroundEditMaxAlt);
+	sprintf(str, SZ_BRUSH_MAX_ALT_TXT, GroundEditMaxAlt);
+	SetDlgItemText(hWnd, IDC_BRUSH_MAX_ALT_TXT, str);
 	
 	if(fFlatten)
 		CheckDlgButton(hWnd, IDC_BRUSH_FLATTEN, BST_CHECKED);
@@ -2967,6 +2971,10 @@ int __stdcall DlgBrushProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			//
 			Item = GetDlgItem(hWnd, IDC_BRUSH_SPEED);
 			SendMessage(Item, TBM_SETRANGE, true, MAKELONG(BRUSH_SPEED_MIN, BRUSH_SPEED_MAX));
+			SendMessage(Item, TBM_SETPAGESIZE, 0, 1);
+			//
+			Item = GetDlgItem(hWnd, IDC_BRUSH_MAX_ALT);
+			SendMessage(Item, TBM_SETRANGE, true, MAKELONG(BRUSH_MAX_ALT_MIN, BRUSH_MAX_ALT_MAX));
 			SendMessage(Item, TBM_SETPAGESIZE, 0, 1);
 			//
 			DlgBrushUpdate(hWnd);
@@ -3091,6 +3099,16 @@ int __stdcall DlgBrushProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			sprintf(str, SZ_BRUSH_SPEED_TXT, GroundEditBrushSpeed);
 			SendDlgItemMessage(hWnd, IDC_BRUSH_SPEED_TXT, WM_SETTEXT, 0, (LPARAM)str);
+		}
+		else if (GetDlgCtrlID((HWND)lParam) == IDC_BRUSH_MAX_ALT)
+		{
+			GroundEditMaxAlt = (int)SendMessage((HWND)lParam, TBM_GETPOS, 0, 0);
+
+			if (GroundEditMaxAlt < BRUSH_MAX_ALT_MIN) GroundEditMaxAlt = BRUSH_MAX_ALT_MIN;
+			if (GroundEditMaxAlt > BRUSH_MAX_ALT_MAX) GroundEditMaxAlt = BRUSH_MAX_ALT_MAX;
+
+			sprintf(str, SZ_BRUSH_MAX_ALT_TXT, GroundEditMaxAlt);
+			SendDlgItemMessage(hWnd, IDC_BRUSH_MAX_ALT_TXT, WM_SETTEXT, 0, (LPARAM)str);
 		}
 		return 0;
 
