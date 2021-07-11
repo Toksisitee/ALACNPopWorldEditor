@@ -5621,6 +5621,7 @@ void EngineNewMap()
 	memset(&Markers, 0, sizeof(Markers));
 	memset(leveldat, 0, sizeof(LEVELDATv3));
 	memset(ThingsIndices, 0, sizeof(ThingsIndices));
+	leveldat->Header.v2.LevelType = 1;
 
 	THING *thing;
 
