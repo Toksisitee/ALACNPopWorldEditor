@@ -535,8 +535,7 @@ extern HWND		hDlgDevice,
 				hDlgSpellsBuildings,
 				hDlgSpellsNotCharging,
 				hDlgHeader,
-				hDlgObjBank,
-				hDlgMapType,
+				hDlgMapObjTypes,
 				hDlgInfo,
 				hDlgSwapTribe,
 				hDlgMarkers,
@@ -682,17 +681,11 @@ extern void DlgHeaderToggle();
 extern int __stdcall DlgHeaderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 extern void DlgHeaderUpdate(HWND hWnd);
 
-// obj bank dialog
-extern void DlgObjBankToggle();
-extern void DlgObjBankPaint(HDC hdc);
-extern void DlgObjBankUpdate(HWND hWnd);
-extern int __stdcall DlgObjBankProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 // map type dialog
-extern void DlgMapTypeToggle();
-extern void DlgMapTypePaint(HDC hdc);
-extern void DlgMapTypeUpdate(HWND hWnd);
-extern int __stdcall DlgMapTypeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+extern void DlgMapObjTypesToggle();
+extern void DlgMapObjTypesPaint(HDC hdc);
+extern void DlgMapObjTypesUpdate(HWND hWnd);
+extern int __stdcall DlgMapObjTypesProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 // info dialog
 extern void DlgInfoToggle();

@@ -39,8 +39,7 @@ HWND hDlgDevice = 0,
 	 hDlgScript2 = 0,
 	 hDlgSpellsNotCharging = 0,
 	 hDlgHeader = 0,
-	 hDlgObjBank = 0,
-	 hDlgMapType = 0,
+	 hDlgMapObjTypes = 0,
 	 hDlgInfo = 0,
 	 hDlgSwapTribe = 0,
 	 hDlgMarkers = 0,
@@ -1643,8 +1642,7 @@ long FinishDialogs()
 	if (hDlgScript2)			DlgScript2();
 	if(hDlgSpellsNotCharging)	DlgSpellsNotChargingToggle();
 	if(hDlgHeader)				DlgHeaderToggle();
-	if(hDlgObjBank)				DlgObjBankToggle();
-	if(hDlgMapType)				DlgMapTypeToggle();
+	if(hDlgMapObjTypes)				DlgMapObjTypesToggle();
 	if(hDlgInfo)				DlgInfoToggle();
 	if(hDlgSwapTribe)			DlgSwapTribeToggle();
 	if(hDlgMarkers)				DlgMarkersToggle();
@@ -1671,8 +1669,7 @@ void LockDialogs(bool lock)
 	if(hDlgSpellsBuildings)		EnableWindow(hDlgSpellsBuildings, !lock);
 	if(hDlgSpellsNotCharging)	EnableWindow(hDlgSpellsNotCharging, !lock);
 	if(hDlgHeader)				EnableWindow(hDlgHeader, !lock);
-	if(hDlgObjBank)				EnableWindow(hDlgObjBank, !lock);
-	if(hDlgMapType)				EnableWindow(hDlgMapType, !lock);
+	if(hDlgMapObjTypes)				EnableWindow(hDlgMapObjTypes, !lock);
 	if(hDlgInfo)				EnableWindow(hDlgInfo, !lock);
 	if(hDlgSwapTribe)			EnableWindow(hDlgSwapTribe, !lock);
 	if(hDlgMarkers)				EnableWindow(hDlgMarkers, !lock);
@@ -2640,12 +2637,8 @@ long __stdcall MenuBarProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			DlgHeaderToggle();
 			break;
 
-		case ID_HEADER_OBJECTBANK:
-			DlgObjBankToggle();
-			break;
-
 		case ID_HEADER_MAPTEXTURE:
-			DlgMapTypeToggle();
+			DlgMapObjTypesToggle();
 			break;
 
 		case ID_AISCRIPT_ATTRIBUTES:
@@ -6769,8 +6762,7 @@ void UpdateHeaderDialogs()
 	DlgScript2Update(hDlgScript2);
 	DlgSpellsNotChargingUpdate(hDlgSpellsNotCharging);
 	DlgHeaderUpdate(hDlgHeader);
-	DlgObjBankUpdate(hDlgObjBank);
-	DlgMapTypeUpdate(hDlgMapType);
+	DlgMapObjTypesUpdate(hDlgMapObjTypes);
 }
 
 // -=-=- allies dialog -=-=-
@@ -8035,171 +8027,26 @@ void DlgHeaderUpdate(HWND hWnd)
 		CheckDlgButton(hWnd, IDC_HEADER_NO_REINCARNATE_TIME, BST_UNCHECKED);
 }
 
-
-// -=-=- obj bank dialog -=-=-
-
-void DlgObjBankToggle()
-{
-	if(hDlgObjBank)
-	{
-		DestroyWindow(hDlgObjBank);
-		hDlgObjBank = 0;
-	}
-	else
-	{
-		hDlgObjBank = CreateDialogParam(hInst, MAKEINTRESOURCE(IDD_OBJ_BANK), hMainWnd, DlgObjBankProc, 0);
-		ShowWindow(hDlgObjBank, SW_SHOW);
-	}
-}
-
-
-void DlgObjBankPaint(HDC hdc)
-{
-	HBITMAP hbmp = 0;
-
-	switch(leveldat->Header.v2.ObjectsBankNum)
-	{
-	case 0: hbmp = hBank0; break;
-	case 2: hbmp = hBank2; break;
-	case 3: hbmp = hBank3; break;
-	case 4: hbmp = hBank4; break;
-	case 5: hbmp = hBank5; break;
-	case 6: hbmp = hBank6; break;
-	case 7: hbmp = hBank7; break;
-	}
-
-	HDC hdcbmp = CreateCompatibleDC(hdc);
-	if(hdcbmp)
-	{
-		SelectObject(hdcbmp, hbmp);
-		BitBlt(hdc, 10, 10, 115, 70, hdcbmp, 0, 0, SRCCOPY);
-		DeleteDC(hdcbmp);
-	}
-}
-
-
-void DlgObjBankUpdate(HWND hWnd)
-{
-	if(!hWnd) return;
-
-	//
-
-	HWND hItem = GetDlgItem(hWnd, IDC_OBJ_BANK);
-	if(hItem)
-	{
-		switch(leveldat->Header.v2.ObjectsBankNum)
-		{
-		case 0: SendMessage(hItem, CB_SETCURSEL, 0, 0); break;
-		case 2: SendMessage(hItem, CB_SETCURSEL, 1, 0); break;
-		case 3: SendMessage(hItem, CB_SETCURSEL, 2, 0); break;
-		case 4: SendMessage(hItem, CB_SETCURSEL, 3, 0); break;
-		case 5: SendMessage(hItem, CB_SETCURSEL, 4, 0); break;
-		case 6: SendMessage(hItem, CB_SETCURSEL, 5, 0); break;
-		case 7: SendMessage(hItem, CB_SETCURSEL, 6, 0); break;
-		default: SendMessage(hItem, CB_SETCURSEL, -1, 0);
-		}
-	}
-
-	HDC hdc = GetDC(hWnd);
-	DlgObjBankPaint(hdc);
-	ReleaseDC(hWnd, hdc);
-}
-
-
-int __stdcall DlgObjBankProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch(uMsg)
-	{
-	case WM_INITDIALOG:
-		{
-			HWND hItem = GetDlgItem(hWnd, IDC_OBJ_BANK);
-			if(!hItem) return 0;
-
-			SendMessage(hItem, CB_RESETCONTENT, 0, 0);
-			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_0);
-			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_2);
-			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_3);
-			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_4);
-			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_5);
-			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_6);
-			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_7);
-
-			DlgObjBankUpdate(hWnd);
-		}
-		return 0;
-
-	case WM_PAINT:
-		{
-			PAINTSTRUCT ps;
-			BeginPaint(hWnd, &ps);
-			DlgObjBankPaint(ps.hdc);
-			EndPaint(hWnd, &ps);
-		}
-		return 0;
-
-	case WM_CLOSE:
-		DlgObjBankToggle();
-		return 0;
-
-	case WM_COMMAND:
-		if(LOWORD(wParam) != IDC_OBJ_BANK) return 0;
-		if(HIWORD(wParam) != CBN_SELCHANGE) return 0;
-
-		switch(SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0))
-		{
-		case 0: leveldat->Header.v2.ObjectsBankNum = 0; break;
-		case 1: leveldat->Header.v2.ObjectsBankNum = 2; break;
-		case 2: leveldat->Header.v2.ObjectsBankNum = 3; break;
-		case 3: leveldat->Header.v2.ObjectsBankNum = 4; break;
-		case 4: leveldat->Header.v2.ObjectsBankNum = 5; break;
-		case 5: leveldat->Header.v2.ObjectsBankNum = 6; break;
-		case 6: leveldat->Header.v2.ObjectsBankNum = 7; break;
-		default: leveldat->Header.v2.ObjectsBankNum = 0;
-		}
-
-		if (net.IsInitialized())
-		{
-			struct Packet *p = new Packet;
-			p->wType = PACKETTYPE_OBJECT_BANK;
-			p->wData[0] = leveldat->Header.v2.ObjectsBankNum;
-			net.SendPacket(p);
-			p->del();
-		}
-
-		EngineSetTreeType();
-
-		{
-			HDC hdc = GetDC(hWnd);
-			DlgObjBankPaint(hdc);
-			ReleaseDC(hWnd, hdc);
-		}
-
-		return 0;
-	}
-
-	return 0;
-}
-
-
 // -=-=- map type dialog -=-=-
 
-void DlgMapTypeToggle()
+void DlgMapObjTypesToggle()
 {
-	if(hDlgMapType)
+	if(hDlgMapObjTypes)
 	{
-		DestroyWindow(hDlgMapType);
-		hDlgMapType = 0;
+		DestroyWindow(hDlgMapObjTypes);
+		hDlgMapObjTypes = 0;
 	}
 	else
 	{
-		hDlgMapType = CreateDialogParam(hInst, MAKEINTRESOURCE(IDD_MAP_TYPE), hMainWnd, DlgMapTypeProc, 0);
-		ShowWindow(hDlgMapType, SW_SHOW);
+		hDlgMapObjTypes = CreateDialogParam(hInst, MAKEINTRESOURCE(IDD_MAP_TYPE), hMainWnd, DlgMapObjTypesProc, 0);
+		ShowWindow(hDlgMapObjTypes, SW_SHOW);
 	}
 }
 
 
-void DlgMapTypePaint(HDC hdc)
+void DlgMapObjTypesPaint(HDC hdc)
 {
+	// Map type
 	HBITMAP hbmp = 0;
 
 	switch(leveldat->Header.v2.LevelType)
@@ -8249,15 +8096,35 @@ void DlgMapTypePaint(HDC hdc)
 		BitBlt(hdc, 10, 10, 120, 120, hdcbmp, 0, 0, SRCCOPY);
 		DeleteDC(hdcbmp);
 	}
+
+	// Objects type
+	hbmp = 0;
+	switch (leveldat->Header.v2.ObjectsBankNum)
+	{
+		case 0: hbmp = hBank0; break;
+		case 2: hbmp = hBank2; break;
+		case 3: hbmp = hBank3; break;
+		case 4: hbmp = hBank4; break;
+		case 5: hbmp = hBank5; break;
+		case 6: hbmp = hBank6; break;
+		case 7: hbmp = hBank7; break;
+	}
+
+	hdcbmp = CreateCompatibleDC(hdc);
+	if (hdcbmp)
+	{
+		SelectObject(hdcbmp, hbmp);
+		BitBlt(hdc, 150, 10, 115, 70, hdcbmp, 0, 0, SRCCOPY);
+		DeleteDC(hdcbmp);
+	}
 }
 
 
-void DlgMapTypeUpdate(HWND hWnd)
+void DlgMapObjTypesUpdate(HWND hWnd)
 {
 	if(!hWnd) return;
 
-	//
-
+	// Map type
 	HWND hItem = GetDlgItem(hWnd, IDC_MAP_TYPE);
 	if(hItem)
 	{
@@ -8268,13 +8135,30 @@ void DlgMapTypeUpdate(HWND hWnd)
 			SendMessage(hItem, CB_SETCURSEL, -1, 0);
 	}
 
+	// Objects type
+	hItem = GetDlgItem(hWnd, IDC_OBJ_BANK);
+	if (hItem)
+	{
+		switch (leveldat->Header.v2.ObjectsBankNum)
+		{
+			case 0: SendMessage(hItem, CB_SETCURSEL, 0, 0); break;
+			case 2: SendMessage(hItem, CB_SETCURSEL, 1, 0); break;
+			case 3: SendMessage(hItem, CB_SETCURSEL, 2, 0); break;
+			case 4: SendMessage(hItem, CB_SETCURSEL, 3, 0); break;
+			case 5: SendMessage(hItem, CB_SETCURSEL, 4, 0); break;
+			case 6: SendMessage(hItem, CB_SETCURSEL, 5, 0); break;
+			case 7: SendMessage(hItem, CB_SETCURSEL, 6, 0); break;
+			default: SendMessage(hItem, CB_SETCURSEL, -1, 0);
+		}
+	}
+
 	HDC hdc = GetDC(hWnd);
-	DlgMapTypePaint(hdc);
+	DlgMapObjTypesPaint(hdc);
 	ReleaseDC(hWnd, hdc);
 }
 
 
-int __stdcall DlgMapTypeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+int __stdcall DlgMapObjTypesProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch(uMsg)
 	{
@@ -8321,7 +8205,19 @@ int __stdcall DlgMapTypeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_MAP_Y);
 			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_MAP_Z);
 
-			DlgMapTypeUpdate(hWnd);
+			hItem = GetDlgItem(hWnd, IDC_OBJ_BANK);
+			if (!hItem) return 0;
+
+			SendMessage(hItem, CB_RESETCONTENT, 0, 0);
+			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_0);
+			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_2);
+			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_3);
+			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_4);
+			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_5);
+			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_6);
+			SendMessage(hItem, CB_ADDSTRING, 0, (LPARAM)SZ_OBJ_BANK_7);
+
+			DlgMapObjTypesUpdate(hWnd);
 		}
 		return 0;
 
@@ -8329,40 +8225,70 @@ int __stdcall DlgMapTypeProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 			PAINTSTRUCT ps;
 			BeginPaint(hWnd, &ps);
-			DlgMapTypePaint(ps.hdc);
+			DlgMapObjTypesPaint(ps.hdc);
 			EndPaint(hWnd, &ps);
 		}
 		return 0;
 
 	case WM_CLOSE:
-		DlgMapTypeToggle();
+		DlgMapObjTypesToggle();
 		return 0;
 
 	case WM_COMMAND:
-		if(LOWORD(wParam) != IDC_MAP_TYPE) return 0;
-		if(HIWORD(wParam) != CBN_SELCHANGE) return 0;
-
-		int i = SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0);
-		if(i >= 0 && i <= 35)
-			leveldat->Header.v2.LevelType = i;
-		else
-			leveldat->Header.v2.LevelType = 0;
-
-		if (net.IsInitialized())
+		if(LOWORD(wParam) == IDC_MAP_TYPE )
 		{
-			struct Packet *p = new Packet;
-			p->wType = PACKETTYPE_MAP_TYPE;
-			p->wData[0] = leveldat->Header.v2.LevelType;
-			net.SendPacket(p);
-			p->del();
-		}
+			int i = SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0);
+			if(i >= 0 && i <= 35)
+				leveldat->Header.v2.LevelType = i;
+			else
+				leveldat->Header.v2.LevelType = 0;
 
+			if (net.IsInitialized())
+			{
+				struct Packet *p = new Packet;
+				p->wType = PACKETTYPE_MAP_TYPE;
+				p->wData[0] = leveldat->Header.v2.LevelType;
+				net.SendPacket(p);
+				p->del();
+			}
+
+			{
+				HDC hdc = GetDC(hWnd);
+				DlgMapObjTypesPaint(hdc);
+				ReleaseDC(hWnd, hdc);
+			}
+		}
+		else if ((LOWORD(wParam) == IDC_OBJ_BANK) )
 		{
-			HDC hdc = GetDC(hWnd);
-			DlgMapTypePaint(hdc);
-			ReleaseDC(hWnd, hdc);
-		}
+			switch (SendMessage((HWND)lParam, CB_GETCURSEL, 0, 0))
+			{
+				case 0: leveldat->Header.v2.ObjectsBankNum = 0; break;
+				case 1: leveldat->Header.v2.ObjectsBankNum = 2; break;
+				case 2: leveldat->Header.v2.ObjectsBankNum = 3; break;
+				case 3: leveldat->Header.v2.ObjectsBankNum = 4; break;
+				case 4: leveldat->Header.v2.ObjectsBankNum = 5; break;
+				case 5: leveldat->Header.v2.ObjectsBankNum = 6; break;
+				case 6: leveldat->Header.v2.ObjectsBankNum = 7; break;
+				default: leveldat->Header.v2.ObjectsBankNum = 0;
+			}
 
+			if (net.IsInitialized())
+			{
+				struct Packet *p = new Packet;
+				p->wType = PACKETTYPE_OBJECT_BANK;
+				p->wData[0] = leveldat->Header.v2.ObjectsBankNum;
+				net.SendPacket(p);
+				p->del();
+			}
+
+			EngineSetTreeType();
+
+			{
+				HDC hdc = GetDC(hWnd);
+				DlgMapObjTypesPaint(hdc);
+				ReleaseDC(hWnd, hdc);
+			}
+		}
 		return 0;
 	}
 

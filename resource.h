@@ -66,7 +66,6 @@
 #define ID_HEADER_SPELLSNOTCHARGING     332
 #define ID_HEADER_ALLIES                333
 #define ID_HEADER_GENERAL               334
-#define ID_HEADER_OBJECTBANK            335
 #define ID_HEADER_MAPTEXTURE            336
 #define ID_OPTIONS_HELP                 337
 #define ID_AISCRIPT_ATTRIBUTES          338

@@ -755,7 +755,7 @@ void Network::OnObjectBank(BYTE nBank)
 {
 	Log(NET_DEBUG, "Network::OnObjectBank");
 	leveldat->Header.v2.ObjectsBankNum = nBank;
-	DlgObjBankUpdate(hDlgObjBank);
+	DlgMapObjTypesUpdate(hDlgMapObjTypes);
 	EngineSetTreeType();
 }
 
@@ -763,7 +763,7 @@ void Network::OnMapType(BYTE nBank)
 {
 	Log(NET_DEBUG, "Network::OnMapType");
 	leveldat->Header.v2.LevelType = nBank;
-	DlgMapTypeUpdate(hDlgMapType);
+	DlgMapObjTypesUpdate(hDlgMapObjTypes);
 }
 
 void Network::OnCreateMarker(int nMarker, WORD x, WORD z)
