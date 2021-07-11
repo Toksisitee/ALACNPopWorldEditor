@@ -2423,7 +2423,7 @@ long __stdcall MenuBarProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	case WM_CLOSE:
-		MenuBarToggle();
+		//MenuBarToggle();
 		return 0;
 
 	case WM_NOTIFY:
