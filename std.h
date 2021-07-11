@@ -8,7 +8,7 @@ http://alacn.dnsalias.org:8080/
 
 */
 
-#include "enet/enet.h"
+#include "enet\enet.h"
 //#pragma comment(lib, __FILE__"\\..\\enet\\enet.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "winmm.lib")
