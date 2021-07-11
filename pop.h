@@ -6,7 +6,7 @@ alacn.uhahaa@gmail.com
 http://alacn.dnsalias.org:8080/
 
 */
-#pragma once
+
 #define MAX_THINGS							66535
 #define MAX_V2_THINGS						2000
 #define MAX_THINGS_LOAD						100
