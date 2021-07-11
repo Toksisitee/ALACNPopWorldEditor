@@ -1394,6 +1394,14 @@ long EngineUpdateFrame()
 
 long EngineRestore()
 {
+	// Toxicity: 
+	// Pretend everything is ok until we regain window focus, and only then attempt to restore the engine.
+	// This will prevent the engine from melting down and will eventually result in a succesful surface restore.
+	if (GetFocus() != hMainWnd)
+	{
+		return 1;
+	}
+
 	if SUCCEEDED(rs = lpDDSPrimary->Restore())
 	{
 		lpDDSBackBuffer->Restore();
