@@ -8,11 +8,11 @@
 #define BUILD_INCREMENT		0
 #endif
 
-#define APPNAME					"Populous World Editor 1.8.0"
+#define APPNAME					"Populous World Editor 1.9.0"
 
 // Determine the version number constants.
 #define ENGINE_MAJOR_VERSION		1
-#define ENGINE_MINOR_VERSION		8
+#define ENGINE_MINOR_VERSION		9
 #define ENGINE_REVISION_NUMBER		0
 #define ENGINE_BUILD_NUMBER		BUILD_INCREMENT
 
