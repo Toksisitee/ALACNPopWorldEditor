@@ -1,3 +1,16 @@
+Version 1.9.0
+Date: Aug 28 2021
+Author: Toksisitee
+
+* New Max. Alt brush setting. The value you enter is the max height (altitude) terrain can reach while terraforming.
+* The World Editor will no longer crash (screen going black) when opening other full screen applications.
+* Engine's X & Z coordinates are no longer being shown in the bottom left corner. People were mistakenly using these values in their scripts.
+* When copying a marker position a comma will be added between the coords (e.g. "110, 100").
+* The Main Menu bar cannot be closed any longer.
+* New maps will now default to texture slot 1 instead of 0.
+* Map Type & Objects Bank dialogs were merged together.
+
+
 Version 1.8.0
 Date: Jan 3 2020
 Authors: Toksisitee & WhitePhantom
