@@ -1,9 +1,12 @@
 # PopWorldEditor
 
-PopWorldEditor is a multipurpose tool used in creating maps for **Populous: The Beginning**.  
+<img align="left" width="100" height="100" src="https://i.imgur.com/IlTprgN.png">   PopWorldEditor is a multipurpose tool used in creating maps for Bullfrog's **Populous: The Beginning** game.
 
 This repository has been made to improve upon ALACN's original work by fixing bugs, adding quality of life updates, or completely new features.
 There are multiple forks of the original project out there, but this is the most up-to-date repository, although the commit history is missing due to this being uploaded as a new project.
+
+### Building
+The project compiles successfully with Visual Studio 2017 and upwards when retargeted.
 
 ### New Features
 - **Network support over UDP**
